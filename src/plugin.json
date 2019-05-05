@@ -1,0 +1,53 @@
+{
+  "type": "app",
+  "name": "Quarum",
+  "id": "lapnap-quarum-app",
+
+  "preload": true,
+
+  "info": {
+    "description": "Firebase Application",
+    "author": {
+      "name": "ryantxu"
+    },
+    "keywords": ["firebase", "authentication"],
+    "logos": {
+      "small": "img/firebase.svg",
+      "large": "img/firebase.svg"
+    },
+    "links": [
+      {"name": "Project site", "url": "https://github.com/ryantxu/grafana-firebase-app"},
+      {
+        "name": "MIT License",
+        "url": "https://github.com/ryantxu/grafana-firebase-app/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+
+  "includes": [
+    {
+      "type": "page",
+      "name": "Login",
+      "component": "FirebaseLoginPageCtrl",
+      "role": "Viewer",
+      "addToNav": true,
+      "defaultNav": true
+    },
+    {
+      "type": "page",
+      "name": "Debug",
+      "component": "DebugPageCtrl",
+      "role": "Viewer",
+      "addToNav": true,
+      "defaultNav": true
+    }
+  ],
+
+  "dependencies": {
+    "grafanaVersion": "6.2.x",
+    "plugins": []
+  }
+}
