@@ -2,6 +2,10 @@ import {AppPlugin} from '@grafana/ui';
 import {ExampleTab1} from './config/ExampleTab1';
 import {ExampleTab2} from './config/ExampleTab2';
 import {ExampleRootPage} from './ExampleRootPage';
+import {ExampleConfigCtrl} from './legacy/config';
+
+// Needed to get an enable/disable button
+export {ExampleConfigCtrl as ConfigCtrl};
 
 export const plugin = new AppPlugin()
   .setRootPage(ExampleRootPage)

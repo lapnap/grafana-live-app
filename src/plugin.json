@@ -6,14 +6,14 @@
   "preload": true,
 
   "info": {
-    "description": "Firebase Application",
+    "description": "Group Discovery",
     "author": {
-      "name": "ryantxu"
+      "name": "Lapnap Labs"
     },
     "keywords": ["firebase", "authentication"],
     "logos": {
-      "small": "img/firebase.svg",
-      "large": "img/firebase.svg"
+      "small": "img/quarum.svg",
+      "large": "img/quarum.svg"
     },
     "links": [
       {"name": "Project site", "url": "https://github.com/ryantxu/grafana-firebase-app"},
@@ -27,24 +27,7 @@
     "updated": "%TODAY%"
   },
 
-  "includes": [
-    {
-      "type": "page",
-      "name": "Login",
-      "component": "FirebaseLoginPageCtrl",
-      "role": "Viewer",
-      "addToNav": true,
-      "defaultNav": true
-    },
-    {
-      "type": "page",
-      "name": "Debug",
-      "component": "DebugPageCtrl",
-      "role": "Viewer",
-      "addToNav": true,
-      "defaultNav": true
-    }
-  ],
+  "includes": [],
 
   "dependencies": {
     "grafanaVersion": "6.2.x",
