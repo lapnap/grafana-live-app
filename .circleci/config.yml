@@ -20,6 +20,6 @@ jobs:
           command: 'yarn build'
       - run:
           name: zip dist
-          command: 'cd dist && zip -r9 ../ryantxu-firebase-app-dev.zip *'
+          command: 'cd dist && zip -r9 ../lapnap-quarum-app-dev.zip *'
       - store_artifacts:
-          path: ryantxu-firebase-app-dev.zip
+          path: lapnap-quarum-app-dev.zip

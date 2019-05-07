@@ -4,7 +4,7 @@ import React, {PureComponent} from 'react';
 // Types
 import {AppRootProps, NavModelItem} from '@grafana/ui';
 
-import {BackendSrv, getBackendSrv} from 'grafana/app/core/services/backend_srv';
+//import {BackendSrv, getBackendSrv} from 'grafana/app/core/services/backend_srv';
 
 interface Props extends AppRootProps {}
 
@@ -20,8 +20,8 @@ export class ExampleRootPage extends PureComponent<Props> {
   componentDidMount() {
     this.updateNav();
 
-    const srv: BackendSrv = getBackendSrv();
-    console.log('GOT', srv);
+    // const srv: BackendSrv = getBackendSrv();
+    // console.log('GOT', srv);
   }
 
   componentDidUpdate(prevProps: Props) {
