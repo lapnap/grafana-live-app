@@ -2,6 +2,7 @@ import {AppPlugin} from '@grafana/ui';
 import {ExampleTab1} from './config/ExampleTab1';
 import {ExampleTab2} from './config/ExampleTab2';
 import {ExampleRootPage} from './ExampleRootPage';
+import {QuarumApp} from './QuarumApp';
 
 // Needed to get an enable/disable button
 export {ConfigCtrl} from './legacy/config';
@@ -21,3 +22,5 @@ export const plugin = new AppPlugin()
     body: ExampleTab2,
     id: 'tab2',
   });
+
+export const quarum = new QuarumApp(plugin);

@@ -13,7 +13,6 @@
   "author": "ryantxu",
   "license": "MIT",
   "keywords": [
-    "firebase",
     "app",
     "grafana",
     "plugin"
@@ -41,6 +40,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",
+    "@types/grafana": "github:CorpGlory/types-grafana",
     "@torkelo/react-select": "2.1.1",
     "@types/classnames": "2.2.7",
     "@types/d3": "5.7.1",
