@@ -26,10 +26,10 @@ export interface QuarumSession {
 }
 
 export enum EventType {
-  Connect, // Connect to server
-  PageLoad, // URL Changed
-  ParamsChanged, // Same URL, new params
-  Disconnect,
+  Connect = 'Connect', // Connect to server
+  PageLoad = 'PageLoad', // URL Changed
+  ParamsChanged = 'ParamsChanged', // Same URL, new params
+  Disconnect = 'Disconnect',
 }
 
 export interface QuarumEvent {
