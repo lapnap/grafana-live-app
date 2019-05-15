@@ -34,7 +34,6 @@ export class QuarumApp {
     this.watcher = window.setInterval(this.watchLocation, 500);
   };
 
-  navCount = 0;
   href: string = 'x';
   watchLocation = () => {
     if (this.href !== document.location.href) {

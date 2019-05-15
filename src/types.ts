@@ -12,3 +12,30 @@ export interface ViewerState {
 export interface QuarmProps {
   others: ViewerState[];
 }
+
+//------------------------------------------------------
+//
+//------------------------------------------------------
+
+export interface QuarumSession {
+  uid: string; //
+  who: string; // user id
+  info: {[key: string]: any}; // User agent etc?
+  start: DateTime;
+  end?: DateTime;
+}
+
+export enum EventType {
+  Connect, // Connect to server
+  PageLoad, // URL Changed
+  ParamsChanged, // Same URL, new params
+  Disconnect,
+}
+
+export interface QuarumEvent {
+  session: string; // Unique for each session
+  type: EventType; //
+  time: DateTime;
+  key: string; // the path
+  info: {[key: string]: any}; // Depends on event
+}
