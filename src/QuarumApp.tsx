@@ -5,10 +5,12 @@ import {QuarumWidget} from './QuarumWidget';
 
 import appEvents from 'grafana/app/core/app_events';
 import {QuarmProps, EventType} from './types';
+import {QuarumLive} from './QuarumLive';
 
 export class QuarumApp {
   readonly elem: HTMLDivElement;
   sessionId?: string;
+  live?: QuarumLive;
 
   watcher?: any;
   props: QuarmProps = {
@@ -56,6 +58,8 @@ export class QuarumApp {
         this.watcher = window.setInterval(this.watchLocation, 500);
       });
     });
+
+    this.live = new QuarumLive('ws://localhost:8080/live/asgsd');
   };
 
   prevPage: string = 'x';
@@ -75,6 +79,10 @@ export class QuarumApp {
         event.info = {
           query: href.substring(idx + 1),
         };
+      }
+
+      if (this.live) {
+        this.live.send(event);
       }
 
       this.href = href;
