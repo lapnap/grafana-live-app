@@ -3,7 +3,7 @@ import {QuarmProps} from 'types';
 
 export class QuarumWidget extends PureComponent<QuarmProps> {
   render() {
-    const {others} = this.props;
+    const {sessions} = this.props;
     const style: CSSProperties = {
       zIndex: 99999,
       color: '#888',
@@ -17,8 +17,12 @@ export class QuarumWidget extends PureComponent<QuarmProps> {
     return (
       <div style={style}>
         Hello!
-        {others.map((viewer, index) => {
-          return <div key={index}>{viewer.page} /</div>;
+        {sessions.map((session, index) => {
+          return (
+            <div key={session.id}>
+              {session.who.name} / {session.last!.time}
+            </div>
+          );
         })}
       </div>
     );

@@ -1,28 +1,34 @@
 import {DateTime} from '@grafana/ui';
 
-export interface ViewerState {
-  who: string; // will be object
-  page: string;
-  params: string;
-  pageLoaded: DateTime;
-  paramsChanged: DateTime;
-  sessionStarted: DateTime;
-}
-
 export interface QuarmProps {
-  others: ViewerState[];
+  sessions: QuarumSession[];
 }
 
 //------------------------------------------------------
 //
 //------------------------------------------------------
 
+export interface QuarumMember {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+export interface QuarumEvent {
+  session: string; // ID
+  action: EventType; //
+  key: string; // the path
+  time: DateTime;
+  info?: {[key: string]: any}; // Depends on event
+}
+
 export interface QuarumSession {
-  uid: string; //
-  who: string; // user id
-  info: {[key: string]: any}; // User agent etc?
+  id: string; //
+  who: QuarumMember; // user id
+  info?: {[key: string]: any}; // User agent etc?
   start: DateTime;
   end?: DateTime;
+  last?: QuarumEvent;
 }
 
 export enum EventType {
@@ -30,12 +36,14 @@ export enum EventType {
   PageLoad = 'PageLoad', // URL Changed
   ParamsChanged = 'ParamsChanged', // Same URL, new params
   Disconnect = 'Disconnect',
+
+  // Not a real event, just keeps the session open
+  Heartbeat = 'Heartbeat',
 }
 
-export interface QuarumEvent {
-  session: string; // Unique for each session
-  type: EventType; //
-  time: DateTime;
-  key: string; // the path
-  info: {[key: string]: any}; // Depends on event
+export interface QuarumResponse {
+  error?: string;
+  sessionId?: string;
+  events?: QuarumEvent[];
+  sessions?: QuarumSession[];
 }

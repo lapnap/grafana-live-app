@@ -35,6 +35,8 @@ module.exports = {
     'moment',
     'react',
     'react-dom',
+    'rxjs',
+    'rxjs/Subject',
     '@grafana/ui',
     function(context, request, callback) {
       var prefix = 'grafana/';
