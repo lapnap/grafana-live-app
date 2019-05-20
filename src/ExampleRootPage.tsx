@@ -3,10 +3,11 @@ import React, {PureComponent} from 'react';
 
 // Types
 import {AppRootProps, NavModelItem} from '@grafana/ui';
+import {AppOptions} from './types';
 
 //import {BackendSrv, getBackendSrv} from 'grafana/app/core/services/backend_srv';
 
-interface Props extends AppRootProps {}
+interface Props extends AppRootProps<AppOptions> {}
 
 const TAB_ID_A = 'A';
 const TAB_ID_B = 'B';

@@ -1,14 +1,15 @@
-import {AppPlugin} from '@grafana/ui';
 import {ExamplePage1} from './config/ExamplePage1';
 import {ExamplePage2} from './config/ExamplePage2';
 import {ExampleRootPage} from './ExampleRootPage';
-import {QuarumApp} from './QuarumApp';
+import {LiveApp} from './LiveApp';
+import {AppPluginMeta} from '@grafana/ui';
+import {AppOptions} from './types';
 
 // Needed to get an enable/disable button
 export {ConfigCtrl} from './legacy/config';
 
 // The React Plugin structure
-export const plugin = new AppPlugin()
+export const plugin = new LiveApp()
   .setRootPage(ExampleRootPage)
   .addConfigPage({
     title: 'Page 1',
@@ -23,4 +24,5 @@ export const plugin = new AppPlugin()
     id: 'page2',
   });
 
-export const quarum = new QuarumApp(plugin);
+// HACK!  load the app...
+plugin.init({} as AppPluginMeta<AppOptions>);

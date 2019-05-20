@@ -1,4 +1,17 @@
 import {DateTime} from '@grafana/ui';
+import {LiveApp} from './LiveApp';
+
+export interface AppOptions {
+  url: string;
+}
+
+export interface LiveAppProps {
+  app: LiveApp;
+}
+
+//------------------------------------------------------
+//
+//------------------------------------------------------
 
 export interface QuarmProps {
   sessions: QuarumSession[];

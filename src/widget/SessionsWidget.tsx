@@ -1,9 +1,25 @@
 import React, {PureComponent, CSSProperties} from 'react';
-import {QuarmProps} from 'types';
+import {LiveAppProps, QuarumSession} from '../types';
 
-export class QuarumWidget extends PureComponent<QuarmProps> {
+interface State {
+  sessions: QuarumSession[];
+}
+
+export class SessionsWidget extends PureComponent<LiveAppProps, State> {
+  // state = {
+  //   sessions: [],
+  // };
+
+  componentDidMount() {
+    console.log('Mounted');
+  }
+
+  componentWillUnmount() {
+    console.log('TODO, unsubscribe');
+  }
+
   render() {
-    const {sessions} = this.props;
+    const {sessions} = this.state;
     const style: CSSProperties = {
       zIndex: 99999,
       color: '#888',

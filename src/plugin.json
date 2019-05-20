@@ -30,7 +30,7 @@
   "includes": [],
 
   "dependencies": {
-    "grafanaVersion": "6.2.x",
+    "grafanaVersion": "6.3.x",
     "plugins": []
   }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "lapnap-quarum-app",
+  "name": "lapnap-live-app",
   "version": "0.0.1-dev",
-  "description": "Lapnap Quarum App",
+  "description": "Lapnap Live App",
   "scripts": {
     "prebuild": "build/prebuild.sh",
     "build": "webpack --config build/webpack.prod.conf.js",
@@ -36,16 +36,18 @@
     "terser": "3.14.1"
   },
   "dependencies": {
-    "firebase": "^5.8.2"
+    "fingerprintjs2": "^2.1.0",
+    "requestidlecallback-polyfill": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",
-    "@types/grafana": "github:CorpGlory/types-grafana",
     "@torkelo/react-select": "2.1.1",
     "@types/classnames": "2.2.7",
     "@types/d3": "5.7.1",
     "@types/enzyme": "^3.1.18",
     "@types/enzyme-adapter-react-16": "^1.0.4",
+    "@types/fingerprintjs2": "^2.0.0",
+    "@types/grafana": "github:CorpGlory/types-grafana",
     "@types/jest": "23.3.14",
     "@types/jquery": "1.10.35",
     "@types/lodash": "4.14.123",

@@ -1,28 +1,19 @@
-import {EventType, QuarumSession, QuarumResponse} from './types';
-import {Subject, Unsubscribable, PartialObserver} from 'rxjs';
+import {EventType, QuarumResponse, QuarumEvent} from './types';
+import {LiveApp} from './LiveApp';
 
-export class QuarumLive {
+export class LiveSocket {
   private conn?: WebSocket;
   private init?: Promise<WebSocket>;
 
   private first = true;
 
-  private subject = new Subject<QuarumSession[]>();
-  private sessions = new Map<string, QuarumSession>();
-
-  constructor(private url: string) {
+  constructor(private url: string, private app: LiveApp) {
     // Close the connetion cleanly
     window.onunload = () => {
       if (this.conn) {
         this.conn.close(200, 'Unload');
       }
     };
-
-    this.subject.subscribe();
-  }
-
-  watchSessions(observer: PartialObserver<QuarumSession[]>): Unsubscribable {
-    return this.subject.subscribe(observer);
   }
 
   getConnection(): Promise<WebSocket> {
@@ -69,33 +60,7 @@ export class QuarumLive {
     if (v.error) {
       console.log('ERROR', v.error);
     }
-    if (v.sessions) {
-      for (const sess of v.sessions) {
-        if (sess.end) {
-          this.sessions.delete(sess.id);
-        } else {
-          this.sessions.set(sess.id, sess);
-        }
-      }
-    }
-    if (v.events) {
-      for (const event of v.events) {
-        const s = this.sessions.get(event.session);
-        if (s) {
-          s.last = event;
-        }
-      }
-    }
-
-    //
-    const current: QuarumSession[] = [];
-    this.sessions.forEach((v, k) => {
-      current.push(v);
-    });
-    this.subject.next(current);
-    // SORT??
-
-    console.log('MESSAGE', v);
+    this.app.sessions.update(v);
   };
 
   reconnect = () => {
@@ -119,22 +84,7 @@ export class QuarumLive {
   //--------------------
   //--------------------
 
-  prevPage: string = 'x%34/!';
-  async update(url: string): Promise<boolean> {
-    const idx = url.indexOf('?');
-    const page = idx > 0 ? url.substring(0, idx) : url;
-
-    const evt: any = {
-      action: page === this.prevPage ? EventType.ParamsChanged : EventType.PageLoad,
-      key: page,
-    };
-    if (idx > 0) {
-      evt.info = {
-        query: url.substring(idx + 1),
-      };
-    }
-    this.prevPage = page;
-
+  async send(evt: Partial<QuarumEvent>): Promise<boolean> {
     const ws = await this.getConnection();
     if (this.first) {
       this.first = false;
