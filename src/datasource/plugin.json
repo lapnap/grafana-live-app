@@ -1,0 +1,36 @@
+{
+  "type": "datasource",
+  "name": "Lapnap Live",
+  "id": "lapnap-live-datasource",
+
+  "metrics": true,
+
+  "info": {
+    "description": "Live Status",
+    "author": {
+      "name": "Lapnap Labs"
+    },
+    "keywords": ["files", "csv"],
+    "logos": {
+      "small": "img/live.svg",
+      "large": "img/live.svg"
+    },
+    "links": [
+      {"name": "Project site", "url": "https://github.com/ryantxu/grafana-firebase-app"},
+      {
+        "name": "MIT License",
+        "url": "https://github.com/ryantxu/grafana-firebase-app/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+
+  "includes": [],
+
+  "dependencies": {
+    "grafanaVersion": "6.3.x",
+    "plugins": []
+  }
+}

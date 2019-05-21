@@ -21,7 +21,7 @@ module.exports = {
   },
   entry: {
     './module': './module.ts',
-    //  'panel/presence/module': './panel/presence/module.ts'
+    './datasource/module': './module.ts',
   },
   output: {
     filename: '[name].js',
@@ -36,7 +36,6 @@ module.exports = {
     'react',
     'react-dom',
     'rxjs',
-    'rxjs/Subject',
     '@grafana/ui',
     function(context, request, callback) {
       var prefix = 'grafana/';
