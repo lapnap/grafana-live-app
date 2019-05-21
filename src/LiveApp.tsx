@@ -6,9 +6,11 @@ import {PartialObserver} from 'rxjs';
 import Fingerprint2 from 'fingerprintjs2';
 import {PageTracker, PageEvent} from './feature/PageTracker';
 import {SessionTracker} from './feature/SessionTracker';
+import {LiveWidgets} from './widget/LapnapWidgets';
 
 export class LiveApp extends AppPlugin<AppOptions> {
   live?: LiveSocket;
+  widgets?: LiveWidgets;
 
   readonly sessions = new SessionTracker();
   readonly pageTracker = new PageTracker();
@@ -35,16 +37,11 @@ export class LiveApp extends AppPlugin<AppOptions> {
   };
 
   delayedInit = () => {
-    // if(!(this.plugin.meta && this.plugin.meta.enabled)) {
-    //   console.log('Not Enabled!');
-    //   return;
-    // }
-    console.log('INIT: ', this.meta);
-
     Fingerprint2.get(components => {
       console.log('FINGERPRINT:', components); // an array of components: {key: ..., value: ...}
     });
 
+    this.widgets = new LiveWidgets(this);
     this.pageTracker.subscribe(this.pageWatcher);
 
     this.live = new LiveSocket('ws://localhost:8080/live/', this);

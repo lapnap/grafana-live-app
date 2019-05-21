@@ -1,19 +1,19 @@
 {
   "type": "app",
-  "name": "Quarum",
-  "id": "lapnap-quarum-app",
+  "name": "Lapnap Live",
+  "id": "lapnap-live-app",
 
   "preload": true,
 
   "info": {
-    "description": "Group Discovery",
+    "description": "Lapnap",
     "author": {
       "name": "Lapnap Labs"
     },
-    "keywords": ["firebase", "authentication"],
+    "keywords": ["lapnap", "live"],
     "logos": {
-      "small": "img/quarum.svg",
-      "large": "img/quarum.svg"
+      "small": "img/live.svg",
+      "large": "img/live.svg"
     },
     "links": [
       {"name": "Project site", "url": "https://github.com/ryantxu/grafana-firebase-app"},

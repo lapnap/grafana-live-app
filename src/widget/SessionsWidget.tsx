@@ -6,9 +6,12 @@ interface State {
 }
 
 export class SessionsWidget extends PureComponent<LiveAppProps, State> {
-  // state = {
-  //   sessions: [],
-  // };
+  constructor(props: LiveAppProps) {
+    super(props);
+    this.state = {
+      sessions: [],
+    };
+  }
 
   componentDidMount() {
     console.log('Mounted');
@@ -19,6 +22,8 @@ export class SessionsWidget extends PureComponent<LiveAppProps, State> {
   }
 
   render() {
+    console.log('RENDER!!!!', this);
+
     const {sessions} = this.state;
     const style: CSSProperties = {
       zIndex: 99999,
