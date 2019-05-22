@@ -21,6 +21,6 @@ export class PresencePanel extends PureComponent<Props, State> {
   }
 
   render() {
-    return <div>TODO! presense panel!!!</div>;
+    return <div>TODO! show who is logged in...</div>;
   }
 }

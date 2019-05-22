@@ -2,6 +2,6 @@
 
 exports[`Render Presense Panel with basic options should render 1`] = `
 <div>
-  TODO! presense panel!!!
+  TODO! show who is logged in...
 </div>
 `;

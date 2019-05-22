@@ -7,7 +7,7 @@ module.exports = {
   roots: ['<rootDir>/src'],
   testRegex: '(\\.|/)(test)\\.(jsx?|tsx?)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  setupFiles: ['./build/jest-shim.ts', './build/jest-setup.ts'],
+  setupFiles: ['./tools/jest-shim.ts', './tools/jest-setup.ts'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   globals: {'ts-jest': {isolatedModules: true}},
 };

@@ -3,12 +3,12 @@
   "version": "0.0.1-dev",
   "description": "Lapnap Live App",
   "scripts": {
-    "prebuild": "build/prebuild.sh",
+    "prebuild": "tools/prebuild.sh",
     "build": "rollup -c rollup.config.ts --environment XXPRODUCTION",
     "dev": "rollup -c rollup.config.ts -w",
     "test": "jest --config jest.config.js",
-    "lint": "tslint -c tslint.json --project tsconfig.json",
-    "format": "prettier-eslint --write \"src/**/*.{ts,tsx,json,css,js,jsx}\""
+    "prettier:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
+    "prettier:write": "prettier --list-different \"src/**/*.{ts,tsx}\" --write"
   },
   "author": "ryantxu",
   "license": "MIT",
