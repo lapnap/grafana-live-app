@@ -1,5 +1,5 @@
 import {DateTime} from '@grafana/ui';
-import {LiveApp} from './LiveApp';
+import {LiveApp} from './app/LiveApp';
 
 export interface AppOptions {
   url: string;

@@ -1,4 +1,4 @@
-import {EventType, QuarumResponse, QuarumEvent} from './types';
+import {EventType, QuarumResponse, QuarumEvent} from 'types';
 import {LiveApp} from './LiveApp';
 
 export class LiveSocket {

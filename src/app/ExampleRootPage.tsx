@@ -3,7 +3,7 @@ import React, {PureComponent} from 'react';
 
 // Types
 import {AppRootProps, NavModelItem} from '@grafana/ui';
-import {AppOptions} from './types';
+import {AppOptions} from 'types';
 
 //import {BackendSrv, getBackendSrv} from 'grafana/app/core/services/backend_srv';
 

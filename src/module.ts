@@ -1,12 +1,12 @@
-import {ExamplePage1} from './config/ExamplePage1';
-import {ExamplePage2} from './config/ExamplePage2';
-import {ExampleRootPage} from './ExampleRootPage';
-import {LiveApp} from './LiveApp';
+import {ExamplePage1} from 'app/config/ExamplePage1';
+import {ExamplePage2} from 'app/config/ExamplePage2';
+import {ExampleRootPage} from 'app/ExampleRootPage';
+import {LiveApp} from 'app/LiveApp';
 import {AppPluginMeta} from '@grafana/ui';
-import {AppOptions} from './types';
+import {AppOptions} from 'types';
 
 // Needed to get an enable/disable button
-export {ConfigCtrl} from './legacy/config';
+export {ConfigCtrl} from 'app/legacy/config';
 
 // The React Plugin structure
 export const plugin = new LiveApp()
