@@ -31,9 +31,6 @@
     "downlevelIteration": true,
     "noUnusedLocals": true,
     "pretty": true,
-
-    "declaration": false,
-    "declarationDir": "dist/types",
     "outDir": "dist/lib",
     "typeRoots": ["node_modules/@types"],
     "baseUrl": "./src"
