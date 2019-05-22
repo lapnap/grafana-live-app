@@ -1,5 +1,4 @@
 {
-  "exclude": ["./node_modules/*"],
   "compilerOptions": {
     "traceResolution": true,
 
@@ -8,14 +7,10 @@
     "lib": ["es6", "dom"],
 
     "module": "esnext",
-    "outDir": "compiled",
-    "declaration": true,
-    "declarationDir": "dist",
     "strict": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "typeRoots": ["./node_modules/@types", "types"],
     "skipLibCheck": true,
     "removeComments": false,
 
@@ -37,11 +32,11 @@
     "noUnusedLocals": true,
     "pretty": true,
 
-    "rootDir": "./src",
-    "baseUrl": "./src",
-    "paths": {
-      "grafana": ["../node_modules/grafana_master/public"],
-      "@grafana/ui": ["../node_modules/grafana_master/packages/grafana-ui/"]
-    }
-  }
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "outDir": "dist/lib",
+    "typeRoots": ["node_modules/@types"],
+    "baseUrl": "./src"
+  },
+  "include": ["src"]
 }

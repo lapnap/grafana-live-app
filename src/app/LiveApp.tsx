@@ -1,12 +1,12 @@
 import {AppPlugin, AppPluginMeta} from '@grafana/ui';
 
-import {AppOptions, EventType} from './types';
-import {LiveSocket} from './LiveSocket';
+import {AppOptions, EventType} from 'types';
+import {LiveSocket} from 'app/LiveSocket';
 import {PartialObserver} from 'rxjs';
 import Fingerprint2 from 'fingerprintjs2';
-import {PageTracker, PageEvent} from './feature/PageTracker';
-import {SessionTracker} from './feature/SessionTracker';
-import {LiveWidgets} from './widget/LapnapWidgets';
+import {PageTracker, PageEvent} from 'feature/PageTracker';
+import {SessionTracker} from 'feature/SessionTracker';
+import {LiveWidgets} from 'widget/LapnapWidgets';
 
 export class LiveApp extends AppPlugin<AppOptions> {
   live?: LiveSocket;

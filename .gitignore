@@ -3,5 +3,7 @@ node_modules/
 
 dist/
 node_modules/
+.rpt2_cache/
+
 
 

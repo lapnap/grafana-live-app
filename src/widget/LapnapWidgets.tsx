@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {LiveApp} from '../LiveApp';
+import {LiveApp} from '../app/LiveApp';
 import {SessionsWidget} from './SessionsWidget';
 
 export class LiveWidgets {

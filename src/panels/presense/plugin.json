@@ -1,0 +1,16 @@
+{
+  "type": "panel",
+  "name": "Presense",
+  "id": "lapnap-presense-panel",
+
+  "info": {
+    "author": {
+      "name": "Lapnal Labs",
+      "url": "https://lapnap.com"
+    },
+    "logos": {
+      "small": "img/presense.svg",
+      "large": "img/presense.svg"
+    }
+  }
+}

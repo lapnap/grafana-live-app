@@ -8,7 +8,7 @@ import {
 } from '@grafana/ui';
 
 import {LiveQuery, LiveOptions} from './types';
-// import {plugin as app} from '../module';
+import {plugin as app} from '../module';
 
 export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
   constructor(private instanceSettings: DataSourceInstanceSettings<LiveOptions>) {
@@ -23,9 +23,9 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
     options: DataQueryRequest<LiveQuery>,
     observer: DataStreamObserver
   ): Promise<DataQueryResponse> {
-    // if (!app.live) {
-    //   return Promise.reject('Not connected');
-    // }
+    if (!app.live) {
+      return Promise.reject('Not connected');
+    }
 
     return Promise.resolve({data: []});
   }
