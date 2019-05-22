@@ -5,7 +5,8 @@ import React, {PureComponent} from 'react';
 import {PresenseOptions} from './types';
 import {PanelProps} from '@grafana/ui';
 
-interface Props extends PanelProps<PresenseOptions> {}
+export interface Props extends PanelProps<PresenseOptions> {}
+
 interface State {
   html: string;
 }
