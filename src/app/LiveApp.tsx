@@ -1,12 +1,12 @@
 import {AppPlugin, AppPluginMeta} from '@grafana/ui';
 
-import {AppOptions, EventType} from 'types';
+import {AppOptions, EventType, QuarumMember} from 'types';
 import {LiveSocket} from 'app/LiveSocket';
 import {PartialObserver} from 'rxjs';
-import Fingerprint2 from 'fingerprintjs2';
 import {PageTracker, PageEvent} from 'feature/PageTracker';
 import {SessionTracker} from 'feature/SessionTracker';
 import {LiveWidgets} from 'widget/LapnapWidgets';
+import {startNewSession} from 'feature/sessions';
 
 export class LiveApp extends AppPlugin<AppOptions> {
   live?: LiveSocket;
@@ -25,9 +25,6 @@ export class LiveApp extends AppPlugin<AppOptions> {
       return;
     }
 
-    // this.elem = document.createElement('div');
-    // document.body.append(this.elem);
-
     // Initalize in a little bit
     setTimeout(this.delayedInit, 250);
   }
@@ -37,17 +34,26 @@ export class LiveApp extends AppPlugin<AppOptions> {
   };
 
   delayedInit = () => {
-    Fingerprint2.get(components => {
-      console.log('FINGERPRINT:', components); // an array of components: {key: ..., value: ...}
-    });
+    const url = 'http://localhost:8080/';
+    const user = window.grafanaBootData.user;
+    const member: QuarumMember = {
+      id: user.id,
+      name: user.email,
+      icon: user.gravatarUrl,
+    };
 
-    this.widgets = new LiveWidgets(this);
-    this.pageTracker.subscribe(this.pageWatcher);
-
-    this.live = new LiveSocket('ws://localhost:8080/live/', this);
-    this.live.getConnection().then(v => {
-      this.pageTracker.watchLocationHref(500);
-    });
+    startNewSession(url, member)
+      .then(info => {
+        console.log('Now start socket with that info', info);
+        this.live = new LiveSocket('ws://localhost:8080/live/?token=' + info.token, this);
+        this.live.getConnection().then(v => {
+          this.pageTracker.subscribe(this.pageWatcher);
+          this.pageTracker.watchLocationHref(500);
+        });
+      })
+      .catch(err => {
+        console.log('Error Starting Session', err);
+      });
   };
 
   // Track any page activity with the server

@@ -5,8 +5,6 @@ export class LiveSocket {
   private conn?: WebSocket;
   private init?: Promise<WebSocket>;
 
-  private first = true;
-
   constructor(private url: string, private app: LiveApp) {
     // Close the connetion cleanly
     window.onunload = () => {
@@ -32,7 +30,6 @@ export class LiveSocket {
         console.log('opened');
         this.conn = ws;
         this.init = undefined;
-        this.first = true;
         setTimeout(this.heartbeat, 15000); // 15seconds
         resolve(this.conn);
       };
@@ -86,41 +83,7 @@ export class LiveSocket {
 
   async send(evt: Partial<QuarumEvent>): Promise<boolean> {
     const ws = await this.getConnection();
-    if (this.first) {
-      this.first = false;
-      const user = window.grafanaBootData.user;
-      ws.send(
-        JSON.stringify([
-          {
-            action: EventType.Connect,
-            member: {
-              id: user.id,
-              name: user.email,
-              icon: user.gravatarUrl,
-            },
-            info: {
-              window: {
-                width:
-                  window.innerWidth ||
-                  document.documentElement.clientWidth ||
-                  document.body.clientWidth,
-                height:
-                  window.innerHeight ||
-                  document.documentElement.clientHeight ||
-                  document.body.clientHeight,
-              },
-              screen: {
-                width: window.screen.availWidth,
-                height: window.screen.availHeight,
-              },
-            },
-          },
-          evt,
-        ])
-      );
-    } else {
-      ws.send(JSON.stringify(evt));
-    }
+    ws.send(JSON.stringify(evt));
     return true;
   }
 }
