@@ -1,25 +1,15 @@
 import Fingerprint2 from 'fingerprintjs2';
-import {QuarumSession, QuarumMember} from 'types';
+import {QuarumMember, ConnectionInfo} from 'types';
 
 const sendToServer: any = {
   language: true,
   timezone: true,
 };
 
-interface SessionInfo {
-  session: QuarumSession;
-  token: string;
-  socket: string;
-}
-
 // info: {
-//   screen: {
-//     width: window.screen.availWidth,
-//     height: window.screen.availHeight,
-//   },
 // },
 
-export async function startNewSession(url: string, member: QuarumMember): Promise<SessionInfo> {
+export async function startNewSession(url: string, member: QuarumMember): Promise<ConnectionInfo> {
   const components = await Fingerprint2.getPromise();
   const info: any = {};
   let entropy = '';
@@ -29,10 +19,16 @@ export async function startNewSession(url: string, member: QuarumMember): Promis
     }
     entropy += component.value + '/';
   }
+  console.log('INFO', components);
+
   info.window = {
     width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
     height:
       window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+  };
+  info.screen = {
+    width: window.screen.availWidth,
+    height: window.screen.availHeight,
   };
 
   return (await fetch(
@@ -47,5 +43,5 @@ export async function startNewSession(url: string, member: QuarumMember): Promis
         fingerprint: Fingerprint2.x64hash128(entropy, 31),
       }),
     })
-  ).then(response => response.json())) as SessionInfo;
+  ).then(response => response.json())) as ConnectionInfo;
 }

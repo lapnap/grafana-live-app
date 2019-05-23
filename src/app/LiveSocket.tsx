@@ -6,7 +6,6 @@ export class LiveSocket {
   private init?: Promise<WebSocket>;
 
   constructor(private url: string, private app: LiveApp) {
-    // Close the connetion cleanly
     window.onunload = () => {
       if (this.conn) {
         this.conn.close(200, 'Unload');
@@ -32,6 +31,10 @@ export class LiveSocket {
         this.init = undefined;
         setTimeout(this.heartbeat, 15000); // 15seconds
         resolve(this.conn);
+        this.app.setState({
+          streaming: true,
+          error: undefined,
+        });
       };
 
       ws.onclose = (evt: any) => {
@@ -40,11 +43,14 @@ export class LiveSocket {
         this.init = undefined;
         reject({message: 'Connection closed'});
         setTimeout(this.reconnect, 2000);
+        this.app.setState({
+          streaming: false,
+        });
       };
 
       ws.onerror = (evt: any) => {
         this.init = undefined;
-        reject({message: 'Connection error'});
+        reject({message: 'Error sending event'});
         console.log('Live: websocket error', evt);
       };
 
@@ -58,6 +64,7 @@ export class LiveSocket {
       console.log('ERROR', v.error);
     }
     this.app.sessions.update(v);
+    this.app.events.update(v);
   };
 
   reconnect = () => {

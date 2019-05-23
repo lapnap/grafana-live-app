@@ -1,30 +1,77 @@
 import React, {PureComponent, CSSProperties} from 'react';
 import {LiveAppProps, QuarumSession} from '../types';
+import {Unsubscribable, PartialObserver} from 'rxjs';
+import {LiveAppState} from 'app/LiveApp';
 
 interface State {
+  app: LiveAppState;
   sessions: QuarumSession[];
 }
 
 export class SessionsWidget extends PureComponent<LiveAppProps, State> {
+  subscriptions: Unsubscribable[] = [];
+
   constructor(props: LiveAppProps) {
     super(props);
     this.state = {
+      app: props.app.getState(),
       sessions: [],
     };
   }
 
   componentDidMount() {
-    console.log('Mounted');
+    const {app} = this.props;
+    this.subscriptions.push(app.subject.subscribe(this.appObserver));
+    this.subscriptions.push(app.sessions.subscribe(this.sessObserver));
   }
 
   componentWillUnmount() {
-    console.log('TODO, unsubscribe');
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
+    this.subscriptions = [];
   }
 
-  render() {
-    console.log('RENDER!!!!', this);
+  // Track any page activity with the server
+  appObserver: PartialObserver<LiveAppState> = {
+    next: (app: LiveAppState) => {
+      this.setState({app});
+    },
+  };
+  sessObserver: PartialObserver<QuarumSession[]> = {
+    next: (sessions: QuarumSession[]) => {
+      this.setState({sessions});
+    },
+  };
 
+  renderStatus = () => {
+    const {app} = this.state;
+    const {connection, error, loading, streaming} = app;
+    return (
+      <div>
+        {connection && <span>{connection.session.who.name}</span>}
+        {loading && <i className="fa fa-spinner fa-spin" />}
+        {streaming && <i className="fa fa-check-circle" />}
+        {error && <span>{error}</span>}
+      </div>
+    );
+  };
+
+  renderSessions = () => {
     const {sessions} = this.state;
+    if (!sessions || !sessions.length) {
+      return;
+    }
+    return (
+      <div>
+        {sessions.map((session, index) => {
+          return <div key={session.id}>{session.fingerprint.browser}</div>;
+        })}
+      </div>
+    );
+  };
+
+  render() {
     const style: CSSProperties = {
       zIndex: 99999,
       color: '#888',
@@ -37,14 +84,8 @@ export class SessionsWidget extends PureComponent<LiveAppProps, State> {
     };
     return (
       <div style={style}>
-        Hello!
-        {sessions.map((session, index) => {
-          return (
-            <div key={session.id}>
-              {session.who.name} / {session.last!.time}
-            </div>
-          );
-        })}
+        {this.renderStatus()}
+        {this.renderSessions()}
       </div>
     );
   }

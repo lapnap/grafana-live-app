@@ -35,10 +35,16 @@ export interface QuarumEvent {
   info?: {[key: string]: any}; // Depends on event
 }
 
+interface FingerprintInfo {
+  hash: string;
+  browser: string;
+  session: string;
+}
+
 export interface QuarumSession {
   id: string; //
   who: QuarumMember; // user id
-  info?: {[key: string]: any}; // User agent etc?
+  fingerprint: FingerprintInfo;
   start: DateTime;
   end?: DateTime;
   last?: QuarumEvent;
@@ -59,4 +65,13 @@ export interface QuarumResponse {
   sessionId?: string;
   events?: QuarumEvent[];
   sessions?: QuarumSession[];
+}
+
+//-------------------------
+//-------------------------
+
+export interface ConnectionInfo {
+  session: QuarumSession;
+  socket: string; // URL to live socker server
+  token: string; // auth token for socket & events
 }

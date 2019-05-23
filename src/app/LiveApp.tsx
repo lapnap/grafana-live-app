@@ -1,18 +1,33 @@
 import {AppPlugin, AppPluginMeta} from '@grafana/ui';
 
-import {AppOptions, EventType, QuarumMember} from 'types';
+import {AppOptions, EventType, QuarumMember, ConnectionInfo} from 'types';
 import {LiveSocket} from 'app/LiveSocket';
-import {PartialObserver} from 'rxjs';
+import {PartialObserver, Subject} from 'rxjs';
 import {PageTracker, PageEvent} from 'feature/PageTracker';
 import {SessionTracker} from 'feature/SessionTracker';
-import {LiveWidgets} from 'widget/LapnapWidgets';
+import {LapnapWidgets} from 'widget/LapnapWidgets';
 import {startNewSession} from 'feature/sessions';
+import {EventTracker} from 'feature/EventTracker';
+
+export interface LiveAppState {
+  loading: boolean;
+  connection?: ConnectionInfo;
+  error?: string;
+  streaming: boolean;
+}
 
 export class LiveApp extends AppPlugin<AppOptions> {
   live?: LiveSocket;
-  widgets?: LiveWidgets;
+  widgets?: LapnapWidgets;
 
+  private state: LiveAppState = {
+    loading: false,
+    streaming: false,
+  };
+
+  readonly subject = new Subject<LiveAppState>();
   readonly sessions = new SessionTracker();
+  readonly events = new EventTracker();
   readonly pageTracker = new PageTracker();
 
   init(meta: AppPluginMeta<AppOptions>) {
@@ -29,9 +44,17 @@ export class LiveApp extends AppPlugin<AppOptions> {
     setTimeout(this.delayedInit, 250);
   }
 
-  render = () => {
-    //  ReactDOM.render(<QuarumWidget {...this.props} />, this.elem);
-  };
+  getState() {
+    return {...this.state};
+  }
+
+  setState(update: Partial<LiveAppState>) {
+    this.state = {
+      ...this.state,
+      ...update,
+    };
+    this.subject.next(this.state);
+  }
 
   delayedInit = () => {
     const url = 'http://localhost:8080/';
@@ -42,9 +65,16 @@ export class LiveApp extends AppPlugin<AppOptions> {
       icon: user.gravatarUrl,
     };
 
+    this.widgets = new LapnapWidgets(this);
+    this.setState({loading: true});
     startNewSession(url, member)
       .then(info => {
-        console.log('Now start socket with that info', info);
+        this.setState({
+          connection: info,
+          loading: false,
+          error: undefined,
+          streaming: false,
+        });
         this.live = new LiveSocket('ws://localhost:8080/live/?token=' + info.token, this);
         this.live.getConnection().then(v => {
           this.pageTracker.subscribe(this.pageWatcher);
