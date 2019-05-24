@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render Events Panel with basic options should render 1`] = `
+<div>
+  TODO! show events.
+</div>
+`;

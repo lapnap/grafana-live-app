@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {LiveApp} from '../app/LiveApp';
-import {SessionsWidget} from './SessionsWidget';
+import {PresenceWidget} from './PresenceWidget';
 
 export class LapnapWidgets {
   readonly sess: HTMLDivElement;
@@ -11,10 +11,10 @@ export class LapnapWidgets {
     document.body.append(this.sess);
     setTimeout(() => {
       this.renderSession();
-    }, 50);
+    }, 25);
   }
 
   renderSession = () => {
-    ReactDOM.render(<SessionsWidget app={this.app} />, this.sess);
+    ReactDOM.render(<PresenceWidget app={this.app} />, this.sess);
   };
 }

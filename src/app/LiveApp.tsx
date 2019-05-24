@@ -1,13 +1,12 @@
 import {AppPlugin, AppPluginMeta} from '@grafana/ui';
 
-import {AppOptions, EventType, QuarumMember, ConnectionInfo} from 'types';
-import {LiveSocket} from 'app/LiveSocket';
+import {AppOptions, EventType, ConnectionInfo, IdentityInfo} from 'types';
+import {LiveSocket, LiveSocketState} from 'feature/LiveSocket';
 import {PartialObserver, Subject} from 'rxjs';
 import {PageTracker, PageEvent} from 'feature/PageTracker';
-import {SessionTracker} from 'feature/SessionTracker';
+import {PresenseObserver} from 'feature/PresenseObserver';
 import {LapnapWidgets} from 'widget/LapnapWidgets';
-import {startNewSession} from 'feature/sessions';
-import {EventTracker} from 'feature/EventTracker';
+import {startNewSession} from 'feature/session';
 
 export interface LiveAppState {
   loading: boolean;
@@ -26,8 +25,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
   };
 
   readonly subject = new Subject<LiveAppState>();
-  readonly sessions = new SessionTracker();
-  readonly events = new EventTracker();
+  readonly presense = new PresenseObserver(this);
   readonly pageTracker = new PageTracker();
 
   init(meta: AppPluginMeta<AppOptions>) {
@@ -41,7 +39,47 @@ export class LiveApp extends AppPlugin<AppOptions> {
     }
 
     // Initalize in a little bit
-    setTimeout(this.delayedInit, 250);
+    setTimeout(this.delayedInit, 100);
+  }
+
+  /**
+   * Get the socket when it is avaliable
+   */
+  getLiveSocket(time: number): Promise<LiveSocket> {
+    return new Promise((resolve, reject) => {
+      const check = () => {
+        if (this.live) {
+          resolve(this.live);
+          return true;
+        }
+        if (this.state.error) {
+          console.log('REJECT', this.state.error);
+          reject(this.state.error);
+          return true;
+        }
+        return false;
+      };
+
+      if (check()) {
+        return;
+      }
+
+      let timer: any;
+      const sub = this.subject.subscribe({
+        next: (s: LiveAppState) => {
+          if (check()) {
+            sub.unsubscribe();
+            window.clearTimeout(timer);
+          }
+        },
+      });
+      timer = window.setTimeout(() => {
+        sub.unsubscribe();
+        if (!check()) {
+          reject('Not Connected');
+        }
+      }, time);
+    });
   }
 
   getState() {
@@ -57,16 +95,17 @@ export class LiveApp extends AppPlugin<AppOptions> {
   }
 
   delayedInit = () => {
+    this.setState({loading: true});
+    this.widgets = new LapnapWidgets(this);
+
     const url = 'http://localhost:8080/';
     const user = window.grafanaBootData.user;
-    const member: QuarumMember = {
-      id: user.id,
-      name: user.email,
-      icon: user.gravatarUrl,
+    const member: IdentityInfo = {
+      login: user.login,
+      email: user.email,
+      avatar: user.gravatarUrl,
     };
 
-    this.widgets = new LapnapWidgets(this);
-    this.setState({loading: true});
     startNewSession(url, member)
       .then(info => {
         this.setState({
@@ -75,15 +114,30 @@ export class LiveApp extends AppPlugin<AppOptions> {
           error: undefined,
           streaming: false,
         });
-        this.live = new LiveSocket('ws://localhost:8080/live/?token=' + info.token, this);
+        this.live = new LiveSocket('ws://localhost:8080/live/?token=' + info.token);
+        this.live.subject.subscribe(this.socketWatcher);
         this.live.getConnection().then(v => {
           this.pageTracker.subscribe(this.pageWatcher);
           this.pageTracker.watchLocationHref(500);
         });
       })
       .catch(err => {
+        const msg = err.message ? err.message : 'Unable to start session';
         console.log('Error Starting Session', err);
+        this.setState({
+          connection: undefined,
+          loading: false,
+          error: msg,
+        });
       });
+  };
+
+  socketWatcher: PartialObserver<LiveSocketState> = {
+    next: (evt: LiveSocketState) => {
+      this.setState({
+        streaming: evt.streaming,
+      });
+    },
   };
 
   // Track any page activity with the server
@@ -104,7 +158,8 @@ export class LiveApp extends AppPlugin<AppOptions> {
               query: evt.query,
             },
           };
-      this.live.send(msg);
+
+      this.live.notify(msg);
     },
   };
 }

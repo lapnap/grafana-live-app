@@ -1,4 +1,4 @@
-import {DateTime} from '@grafana/ui';
+import {KeyValue, LoadingState} from '@grafana/ui';
 import {LiveApp} from './app/LiveApp';
 
 export interface AppOptions {
@@ -13,41 +13,44 @@ export interface LiveAppProps {
 //
 //------------------------------------------------------
 
-export interface QuarmProps {
-  sessions: QuarumSession[];
-}
-
-//------------------------------------------------------
-//
-//------------------------------------------------------
-
-export interface QuarumMember {
-  id: string;
-  name: string;
-  icon: string;
+export interface IdentityInfo {
+  login: string;
+  email: string;
+  avatar: string;
 }
 
 export interface QuarumEvent {
-  session: string; // ID
-  action: EventType; //
+  sessionId?: string;
+  action: EventType | string; //
   key: string; // the path
-  time: DateTime;
-  info?: {[key: string]: any}; // Depends on event
+  time: number;
+  info?: KeyValue<any>; // Depends on event
 }
 
-interface FingerprintInfo {
-  hash: string;
-  browser: string;
-  session: string;
+export interface SessionKeys {
+  session: string; // Created from /start
+  fingerprint: string; // Created by javascript fpjs
+  browser: string; // Browser Cookie that expires in 90 days
+  visit: string; // HTTP Session (cleared when browser closes)
+  identity: string; // User identity from the application
 }
 
-export interface QuarumSession {
+export enum PresenseKey {
+  identity = 'identity',
+  session = 'session',
+  visit = 'visit',
+  browser = 'browser',
+  fingerprint = 'fingerprint',
+}
+
+export interface PresenseInfo {
   id: string; //
-  who: QuarumMember; // user id
-  fingerprint: FingerprintInfo;
-  start: DateTime;
-  end?: DateTime;
-  last?: QuarumEvent;
+  who: IdentityInfo; // user id
+
+  keys: KeyValue<string[]>;
+
+  first: QuarumEvent;
+  last: QuarumEvent;
 }
 
 export enum EventType {
@@ -60,18 +63,44 @@ export enum EventType {
   Heartbeat = 'Heartbeat',
 }
 
-export interface QuarumResponse {
-  error?: string;
-  sessionId?: string;
-  events?: QuarumEvent[];
-  sessions?: QuarumSession[];
+//-------------------------
+//-------------------------
+
+export interface ConnectionInfo {
+  keys: SessionKeys;
+  socket: string; // URL to live socker server
+  token: string; // auth token for socket & events
 }
 
 //-------------------------
 //-------------------------
 
-export interface ConnectionInfo {
-  session: QuarumSession;
-  socket: string; // URL to live socker server
-  token: string; // auth token for socket & events
+export enum QueryResponseAction {
+  Replace = 'Replace', // Replace entire result list
+  Update = 'Update', // Find an existing item an update it
+  Append = 'Append',
+  Remove = 'Remove',
+}
+
+export type QueryResponseObserver<T = KeyValue> = (resp: QueryResponse<T>) => void;
+
+export interface QueryResponse<T = {}> {
+  id: string;
+  state: LoadingState;
+  action: QueryResponseAction;
+  error?: string;
+  value: T;
+}
+
+export interface QueryRequest<T = KeyValue> {
+  id: string;
+  type: string;
+  stream?: boolean;
+  args: T;
+}
+
+export interface LiveRequest<T = KeyValue> {
+  event?: Partial<QuarumEvent>;
+  query?: QueryRequest<T>;
+  cancel?: string;
 }

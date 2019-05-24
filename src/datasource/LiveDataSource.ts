@@ -21,15 +21,16 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
     return `${query.subject}`;
   }
 
-  query(
+  async query(
     options: DataQueryRequest<LiveQuery>,
     observer: DataStreamObserver
   ): Promise<DataQueryResponse> {
-    if (!app.live) {
-      return Promise.reject('Not connected');
+    // Get the socket, or throw an error
+    if (!(await app.getLiveSocket(1000))) {
+      return Promise.reject('Faild to get Live Socket');
     }
 
-    const sessions: SeriesData = {
+    const xxx: SeriesData = {
       fields: [
         {name: 'id', type: FieldType.string},
         {name: 'start', type: FieldType.time},
@@ -41,32 +42,32 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
       rows: [],
     };
 
-    for (const id of app.sessions.sessions.keys()) {
-      const s = app.sessions.sessions.get(id);
-      if (s) {
-        sessions.rows.push([s.id, s.start, s.end, s.who.id, s.who.name, s.who.icon]);
-      }
-    }
+    console.log('XXXX', xxx);
 
-    const events: SeriesData = {
-      fields: [
-        {name: 'time', type: FieldType.time},
-        {name: 'session_id', type: FieldType.string},
-        {name: 'action', type: FieldType.string},
-        {name: 'key', type: FieldType.string},
-        {name: 'info', type: FieldType.other},
-      ],
-      rows: [],
-    };
-    for (const evt of app.events.getRecent()) {
-      if (evt) {
-        events.rows.push([evt.time, evt.session, evt.action, evt.key, evt.info]);
-      }
-    }
+    // for (const id of app.sessions.sessions.keys()) {
+    //   const s = app.sessions.sessions.get(id);
+    //   if (s) {
+    //     sessions.rows.push([s.id, s.start, s.end, s.who.id, s.who.name, s.who.icon]);
+    //   }
+    // }
 
-    console.log('GET', app, sessions);
+    // const events: SeriesData = {
+    //   fields: [
+    //     {name: 'time', type: FieldType.time},
+    //     {name: 'session_id', type: FieldType.string},
+    //     {name: 'action', type: FieldType.string},
+    //     {name: 'key', type: FieldType.string},
+    //     {name: 'info', type: FieldType.other},
+    //   ],
+    //   rows: [],
+    // };
+    // for (const evt of app.events.getRecent()) {
+    //   if (evt) {
+    //     events.rows.push([evt.time, evt.session, evt.action, evt.key, evt.info]);
+    //   }
+    // }
 
-    return Promise.resolve({data: [events]});
+    return Promise.resolve({data: []});
   }
 
   testDatasource() {
