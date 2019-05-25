@@ -127,6 +127,7 @@ export class LiveSocket {
     if (!query.id) {
       throw new Error('Invalid Query.  Needs a unique ID for callback');
     }
+    this.observers.set(query.id, observer);
     query.stream = true;
     return this.send({query});
   }
