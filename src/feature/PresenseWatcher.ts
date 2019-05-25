@@ -13,19 +13,19 @@ export interface PresenseList extends LongerList<PresenseInfo> {
   groupBy: PresenseKey;
 }
 
-export class PresenseObserver {
+export class PresenseWatcher {
   readonly qid = randomId();
 
-  private subject = new Subject<PresenseInfo[]>();
+  private subject = new Subject<PresenseList>();
 
   private groupBy: PresenseKey = PresenseKey.identity;
   private current: PresenseList = {groupBy: PresenseKey.identity, results: []};
 
   constructor(private app: LiveApp) {}
 
-  subscribe(observer: PartialObserver<PresenseInfo[]>): Unsubscribable {
+  subscribe(observer: PartialObserver<PresenseList>): Unsubscribable {
     this.sendQuery();
-    observer.next!(this.current.results);
+    observer.next!(this.current);
     return this.subject.subscribe(observer);
   }
 
@@ -57,7 +57,7 @@ export class PresenseObserver {
     this.current = current;
 
     if (this.subject.observers.length) {
-      this.subject.next(this.current.results);
+      this.subject.next(this.current);
     }
     // If noone is listening, just cancel
     else if (this.app.live) {

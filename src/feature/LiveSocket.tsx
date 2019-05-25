@@ -42,7 +42,6 @@ export class LiveSocket {
       const ws = new WebSocket(this.url);
 
       ws.onopen = (evt: any) => {
-        console.log('opened');
         this.conn = ws;
         this.init = undefined;
         setTimeout(this.heartbeat, 15000); // 15seconds
@@ -54,7 +53,6 @@ export class LiveSocket {
       };
 
       ws.onclose = (evt: any) => {
-        console.log('Live: websocket onclose', evt);
         this.conn = undefined;
         this.init = undefined;
         reject({message: 'Connection closed'});
@@ -78,7 +76,7 @@ export class LiveSocket {
   handleMessage = (evt: MessageEvent) => {
     const v = JSON.parse(evt.data) as QueryResponse;
     if (!v.id) {
-      console.error('Response w/o id', v);
+      console.error('Response w/o id', evt);
       return;
     }
 
@@ -97,8 +95,8 @@ export class LiveSocket {
     console.log('TODO... reconnect....');
   };
 
-  //----------------------------------------
-  //----------------------------------------
+  //---------------------------------------------------
+  //---------------------------------------------------
 
   heartbeat = () => {
     if (this.conn) {
@@ -111,8 +109,8 @@ export class LiveSocket {
     }
   };
 
-  //--------------------
-  //--------------------
+  //---------------------------------------------------
+  //---------------------------------------------------
 
   async notify(event: Partial<QuarumEvent>) {
     return this.send({event});

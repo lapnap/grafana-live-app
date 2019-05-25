@@ -1,11 +1,12 @@
 import React, {PureComponent, CSSProperties} from 'react';
-import {LiveAppProps, PresenseInfo} from '../types';
+import {LiveAppProps} from '../types';
 import {Unsubscribable, PartialObserver} from 'rxjs';
 import {LiveAppState} from 'app/LiveApp';
+import {PresenseList} from 'feature/PresenseWatcher';
 
 interface State {
   app: LiveAppState;
-  presense: PresenseInfo[];
+  presense: PresenseList;
 }
 
 export class PresenceWidget extends PureComponent<LiveAppProps, State> {
@@ -15,7 +16,7 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
     super(props);
     this.state = {
       app: props.app.getState(),
-      presense: [],
+      presense: ({} as unknown) as PresenseList,
     };
   }
 
@@ -23,7 +24,7 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
     const {app} = this.props;
 
     this.subscriptions.push(app.subject.subscribe(this.appObserver));
-    this.subscriptions.push(app.presense.subscribe(this.sessObserver));
+    this.subscriptions.push(app.presense.subscribe(this.presenseObserver));
   }
 
   componentWillUnmount() {
@@ -39,8 +40,8 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
       this.setState({app});
     },
   };
-  sessObserver: PartialObserver<PresenseInfo[]> = {
-    next: (presense: PresenseInfo[]) => {
+  presenseObserver: PartialObserver<PresenseList> = {
+    next: (presense: PresenseList) => {
       this.setState({presense});
     },
   };
@@ -60,13 +61,13 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
 
   renderPresense = () => {
     const {presense} = this.state;
-    if (!presense || !presense.length) {
+    if (!presense || !presense.results || !presense.results.length) {
       return;
     }
     return (
       <div>
-        {presense.map((presense, index) => {
-          return <div key={presense.id}>{presense.id}</div>;
+        {presense.results.map(p => {
+          return <div key={p.id}>{p.id}</div>;
         })}
       </div>
     );

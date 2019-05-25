@@ -4,7 +4,7 @@ import {AppOptions, EventType, ConnectionInfo, IdentityInfo} from 'types';
 import {LiveSocket, LiveSocketState} from 'feature/LiveSocket';
 import {PartialObserver, Subject} from 'rxjs';
 import {PageTracker, PageEvent} from 'feature/PageTracker';
-import {PresenseObserver} from 'feature/PresenseObserver';
+import {PresenseWatcher} from 'feature/PresenseWatcher';
 import {LapnapWidgets} from 'widget/LapnapWidgets';
 import {startNewSession} from 'feature/session';
 
@@ -25,7 +25,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
   };
 
   readonly subject = new Subject<LiveAppState>();
-  readonly presense = new PresenseObserver(this);
+  readonly presense = new PresenseWatcher(this);
   readonly pageTracker = new PageTracker();
 
   init(meta: AppPluginMeta<AppOptions>) {

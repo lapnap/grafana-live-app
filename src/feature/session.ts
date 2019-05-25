@@ -21,7 +21,6 @@ export async function startNewSession(
     }
     entropy += component.value + '/';
   }
-  console.log('INFO', components);
 
   info.window = {
     width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,

@@ -3,6 +3,8 @@
   "name": "Presense",
   "id": "lapnap-events-panel",
 
+  "skipDataQuery": true,
+
   "info": {
     "author": {
       "name": "Lapnal Labs",
