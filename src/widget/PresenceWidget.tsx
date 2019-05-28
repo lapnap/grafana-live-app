@@ -1,9 +1,11 @@
 import React, {PureComponent, CSSProperties} from 'react';
-import {LiveAppProps} from '../types';
+import {LiveAppProps, PresenseInfo} from '../types';
 import {Unsubscribable, PartialObserver} from 'rxjs';
 import {LiveAppState} from 'app/LiveApp';
 import {PresenseList} from 'feature/PresenseWatcher';
 import {navigateToPath} from 'feature/Navigation';
+import {getAvatarURL} from 'components/ShowPresense';
+import {Tooltip} from '@grafana/ui';
 
 interface State {
   app: LiveAppState;
@@ -48,10 +50,20 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
   };
 
   renderStatus = () => {
+    const {presense} = this.state;
+    if (presense && presense.results && presense.results.length) {
+      return null; // nothing!
+    }
+
+    const wrapStyle: CSSProperties = {
+      border: '1px solid grey',
+      padding: '4px',
+    };
+
     const {app} = this.state;
     const {connection, error, loading, streaming} = app;
     return (
-      <div>
+      <div style={wrapStyle}>
         {connection && <span>{connection.keys.identity}</span>}
         {loading && <i className="fa fa-spinner fa-spin" />}
         {streaming && <i className="fa fa-check-circle" />}
@@ -60,8 +72,30 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
     );
   };
 
-  clickPresense = () => {
-    navigateToPath('a/lapnap-live-app', {page: 'presense'});
+  clickPresense = (p: PresenseInfo) => {
+    const {presense} = this.state;
+    navigateToPath('a/lapnap-live-app', {page: 'session', id: p.id, k: presense.groupBy});
+  };
+
+  renderPresenseTooltip = (p: PresenseInfo) => {
+    return (
+      <div>
+        <div>{p.who.login}</div>
+        <div>{p.who.email}</div>
+
+        {Object.keys(p.keys).map(key => {
+          const vals = p.keys[key];
+          if (vals && vals.length > 1) {
+            return (
+              <div key={key}>
+                {key}: {vals.length}
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    );
   };
 
   renderPresense = () => {
@@ -69,15 +103,31 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
     if (!presense || !presense.results || !presense.results.length) {
       return;
     }
-    const style: CSSProperties = {
+
+    const wrapStyle: CSSProperties = {
+      display: 'flex',
+      padding: '2px',
+    };
+
+    const avatarStyle: CSSProperties = {
+      borderRadius: '50%',
+      height: 30,
+      width: 30,
       cursor: 'pointer',
     };
+
     return (
-      <div onClick={this.clickPresense} style={style}>
+      <>
         {presense.results.map(p => {
-          return <div key={p.id}>{p.id}</div>;
+          return (
+            <div key={p.id} onClick={() => this.clickPresense(p)} style={wrapStyle}>
+              <Tooltip content={() => this.renderPresenseTooltip(p)} theme="info" placement="top">
+                <img style={avatarStyle} src={getAvatarURL(p)} />
+              </Tooltip>
+            </div>
+          );
         })}
-      </div>
+      </>
     );
   };
 
@@ -85,12 +135,12 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
     const style: CSSProperties = {
       zIndex: 99999,
       color: '#888',
-      padding: '5px',
-      border: '1px solid grey',
-      background: '#000',
+      padding: '0px',
       position: 'absolute',
-      right: '10px',
-      bottom: '10px',
+      right: '20px',
+      bottom: '20px',
+      flexFlow: 'row wrap',
+      display: 'flex',
     };
     return (
       <div style={style}>

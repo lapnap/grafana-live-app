@@ -1,5 +1,5 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, {PureComponent, CSSProperties} from 'react';
 
 import {Unsubscribable, PartialObserver} from 'rxjs';
 
@@ -43,13 +43,16 @@ export class ShowPresense extends PureComponent<Props, State> {
     },
   };
 
-  renderPresense = (p: PresenseInfo) => {
-    const avatar = p.who.avatar ? p.who.avatar : '/avatar/x-' + p.id;
+  avatarStyle: CSSProperties = {
+    borderRadius: '50%',
+    height: 25,
+  };
 
+  renderPresense = (p: PresenseInfo) => {
     return (
       <div key={p.id}>
-        <img className="icon-circle" src={avatar} height={25} />
-        <span>{p.id}</span>
+        <img style={this.avatarStyle} src={getAvatarURL(p)} />
+        <span>{p.id}</span>XXX
         <div>
           {Object.keys(p.keys).map(key => {
             const vals = p.keys[key];
@@ -82,4 +85,11 @@ export class ShowPresense extends PureComponent<Props, State> {
       </div>
     );
   }
+}
+
+export function getAvatarURL(p: PresenseInfo) {
+  if (p.who && p.who.avatar) {
+    return p.who.avatar;
+  }
+  return '/avatar/x-' + p.id;
 }
