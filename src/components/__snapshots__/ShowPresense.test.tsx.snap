@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render Presense Panel with basic options should render 1`] = `
+<div>
+  <br />
+  Grouped By: 
+  identity
+</div>
+`;
