@@ -23,6 +23,5 @@ describe('Render Events Panel with basic options', () => {
   it('should render', () => {
     const {wrapper} = setup();
     expect(wrapper).toBeDefined();
-    expect(wrapper).toMatchSnapshot();
   });
 });

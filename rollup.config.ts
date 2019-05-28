@@ -12,7 +12,12 @@ const pkg = require('./package.json');
 const {PRODUCTION} = process.env;
 
 export default {
-  input: ['src/module.ts', 'src/datasource/module.ts', 'src/panels/presense/module.ts'],
+  input: [
+    'src/module.ts', // app
+    'src/datasource/module.ts',
+    'src/panels/events/module.ts',
+    'src/panels/presense/module.ts',
+  ],
   output: [
     {
       dir: 'dist',
