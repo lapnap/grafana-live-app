@@ -34,7 +34,15 @@ export default {
     console.log('shared:', id);
     return 'shared';
   },
-  external: ['jquery', 'lodash', 'moment', 'rxjs', 'react', 'react-dom', '@grafana/ui'],
+  external: [
+    'jquery', // exported by grafana
+    'lodash', // exported by grafana
+    'moment', // exported by grafana
+    'rxjs', // exported by grafana
+    'react', // exported by grafana
+    'react-dom', // exported by grafana
+    '@grafana/ui', // exported by grafana
+  ],
   watch: {
     include: 'src/**',
   },

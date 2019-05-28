@@ -2,14 +2,16 @@
 import React, {PureComponent} from 'react';
 
 // Types
-import {PresenseOptions} from './types';
-import {PanelProps} from '@grafana/ui';
-import {plugin as app} from '../../module';
+import {AppRootProps} from '@grafana/ui';
+import {AppOptions} from 'types';
 import {ShowPresense} from 'components/ShowPresense';
+import {app} from 'app/LiveApp';
 
-export interface Props extends PanelProps<PresenseOptions> {}
+interface Props extends AppRootProps<AppOptions> {}
 
-export class PresencePanel extends PureComponent<Props> {
+export const PresensePage_ID = 'presense';
+
+export class PresensePage extends PureComponent<Props> {
   constructor(props: Props) {
     super(props);
   }

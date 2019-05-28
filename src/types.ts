@@ -2,7 +2,7 @@ import {KeyValue, LoadingState} from '@grafana/ui';
 import {LiveApp} from './app/LiveApp';
 
 export interface AppOptions {
-  url: string;
+  datasource: string;
 }
 
 export interface LiveAppProps {

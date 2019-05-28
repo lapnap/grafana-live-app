@@ -1,5 +1,6 @@
 import Fingerprint2 from 'fingerprintjs2';
 import {IdentityInfo, ConnectionInfo} from 'types';
+import {LiveDataSource} from 'datasource/LiveDataSource';
 
 const sendToServer: any = {
   language: true,
@@ -9,7 +10,7 @@ const sendToServer: any = {
 };
 
 export async function startNewSession(
-  url: string,
+  ds: LiveDataSource,
   identity: IdentityInfo
 ): Promise<ConnectionInfo> {
   const components = await Fingerprint2.getPromise();
@@ -33,7 +34,7 @@ export async function startNewSession(
   };
 
   return await fetch(
-    new Request(url + 'session/start', {
+    new Request(ds.getStartSessionUrl(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

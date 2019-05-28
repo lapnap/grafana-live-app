@@ -1,20 +1,19 @@
-<h2>Quarum Config</h2>
+<h2>Live Config</h2>
 
-<div class="gf-form">
-  <div class="gf-form-group">
-    <div class="gf-form-inline">
-      <div class="gf-form">
-        <span class="gf-form-label">Service URL (TODO... will be from datasource)</span>
-        <input type="text" class="gf-form-input" ng-model="ctrl.appModel.jsonData.url" />
-      </div>
-      <div class="gf-form">
-        <gf-form-checkbox
-          class="gf-form"
-          label="Custom Value"
-          checked="ctrl.appModel.jsonData.customCheckbox"
-          switch-class="max-width-6"
-        ></gf-form-checkbox>
-      </div>
+<div class="gf-form-group">
+  <div class="gf-form-inline">
+    <div class="gf-form">
+      <span class="gf-form-label">Source</span>
+      <span ng-if="ctrl.liveDatasources" class="gf-form-select-wrapper">
+        <select
+          class="gf-form-input gf-size-auto"
+          ng-model="ctrl.appModel.jsonData.datasource"
+          ng-options="f as f for f in ctrl.liveDatasources"
+        ></select>
+      </span>
+      <span ng-if="!ctrl.liveDatasources">
+        TODO: create a Live Datasource!
+      </span>
     </div>
   </div>
 </div>

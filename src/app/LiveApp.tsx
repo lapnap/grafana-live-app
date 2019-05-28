@@ -7,6 +7,7 @@ import {PageTracker, PageEvent} from 'feature/PageTracker';
 import {PresenseWatcher} from 'feature/PresenseWatcher';
 import {LapnapWidgets} from 'widget/LapnapWidgets';
 import {startNewSession} from 'feature/session';
+import {LiveDataSource} from 'datasource/LiveDataSource';
 
 export interface LiveAppState {
   loading: boolean;
@@ -16,8 +17,10 @@ export interface LiveAppState {
 }
 
 export class LiveApp extends AppPlugin<AppOptions> {
+  ds?: LiveDataSource;
   live?: LiveSocket;
   widgets?: LapnapWidgets;
+  options: AppOptions = {datasource: ''};
 
   private state: LiveAppState = {
     loading: false,
@@ -29,13 +32,13 @@ export class LiveApp extends AppPlugin<AppOptions> {
   readonly pageTracker = new PageTracker();
 
   init(meta: AppPluginMeta<AppOptions>) {
-    if (this.meta) {
-      console.log('Already initalized....');
-      return;
-    }
     if (this.live) {
       console.log('LIVE Already initalized....');
       return;
+    }
+
+    if (meta.jsonData) {
+      this.options = meta.jsonData;
     }
 
     // Initalize in a little bit
@@ -94,11 +97,17 @@ export class LiveApp extends AppPlugin<AppOptions> {
     this.subject.next(this.state);
   }
 
-  delayedInit = () => {
+  delayedInit = async () => {
     this.setState({loading: true});
     this.widgets = new LapnapWidgets(this);
 
-    const url = 'http://localhost:8080/';
+    if (this.options.datasource) {
+      try {
+        this.ds = await (window as any).grafanaRuntime.datasourceSrv.get(this.options.datasource);
+        this.state;
+      } catch (err) {}
+    }
+
     const user = window.grafanaBootData.user;
     const member: IdentityInfo = {
       login: user.login,
@@ -106,7 +115,15 @@ export class LiveApp extends AppPlugin<AppOptions> {
       avatar: user.gravatarUrl,
     };
 
-    startNewSession(url, member)
+    if (!this.ds) {
+      this.setState({
+        loading: false,
+        error: 'Live Datasource Not Loaded',
+      });
+      return;
+    }
+
+    startNewSession(this.ds, member)
       .then(info => {
         this.setState({
           connection: info,
@@ -163,3 +180,5 @@ export class LiveApp extends AppPlugin<AppOptions> {
     },
   };
 }
+
+export const app = new LiveApp();

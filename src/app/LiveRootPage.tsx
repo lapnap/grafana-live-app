@@ -4,25 +4,20 @@ import React, {PureComponent} from 'react';
 // Types
 import {AppRootProps, NavModelItem} from '@grafana/ui';
 import {AppOptions} from 'types';
+import {PresensePage, PresensePage_ID} from './page/PresensePage';
+import {SessionPage_ID, SessionPage} from './page/SessionPage';
 
 //import {BackendSrv, getBackendSrv} from 'grafana/app/core/services/backend_srv';
 
 interface Props extends AppRootProps<AppOptions> {}
 
-const TAB_ID_A = 'A';
-const TAB_ID_B = 'B';
-const TAB_ID_C = 'C';
-
-export class ExampleRootPage extends PureComponent<Props> {
+export class LiveRootPage extends PureComponent<Props> {
   constructor(props: Props) {
     super(props);
   }
 
   componentDidMount() {
     this.updateNav();
-
-    // const srv: BackendSrv = getBackendSrv();
-    // console.log('GOT', srv);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -38,27 +33,21 @@ export class ExampleRootPage extends PureComponent<Props> {
 
     const tabs: NavModelItem[] = [];
     tabs.push({
-      text: 'Tab A',
+      text: 'Presense',
       icon: 'fa fa-fw fa-file-text-o',
-      url: path + '?tab=' + TAB_ID_A,
-      id: TAB_ID_A,
+      url: path + '?page=' + PresensePage_ID,
+      id: PresensePage_ID,
     });
     tabs.push({
-      text: 'Tab B',
+      text: 'Session',
       icon: 'fa fa-fw fa-file-text-o',
-      url: path + '?tab=' + TAB_ID_B,
-      id: TAB_ID_B,
-    });
-    tabs.push({
-      text: 'Tab C',
-      icon: 'fa fa-fw fa-file-text-o',
-      url: path + '?tab=' + TAB_ID_C,
-      id: TAB_ID_C,
+      url: path + '?page=' + SessionPage_ID,
+      id: SessionPage_ID,
     });
 
     // Set the active tab
     let found = false;
-    const selected = query.tab || TAB_ID_B;
+    const selected = query.page || PresensePage_ID;
     for (const tab of tabs) {
       tab.active = !found && selected === tab.id;
       if (tab.active) {
@@ -70,9 +59,9 @@ export class ExampleRootPage extends PureComponent<Props> {
     }
 
     const node = {
-      text: 'This is the Page title',
+      text: 'Lapnap Live',
       img: meta.info.logos.large,
-      subTitle: 'subtitle here',
+      //   subTitle: 'subtitle here',
       url: path,
       children: tabs,
     };
@@ -86,6 +75,13 @@ export class ExampleRootPage extends PureComponent<Props> {
 
   render() {
     const {path, query} = this.props;
+
+    const selected = query.page || PresensePage_ID;
+    if (selected === PresensePage_ID) {
+      return <PresensePage {...this.props} />;
+    } else if (selected === SessionPage_ID) {
+      return <SessionPage {...this.props} />;
+    }
 
     return (
       <div>

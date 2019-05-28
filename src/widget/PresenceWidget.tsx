@@ -3,6 +3,7 @@ import {LiveAppProps} from '../types';
 import {Unsubscribable, PartialObserver} from 'rxjs';
 import {LiveAppState} from 'app/LiveApp';
 import {PresenseList} from 'feature/PresenseWatcher';
+import {navigateToPath} from 'feature/Navigation';
 
 interface State {
   app: LiveAppState;
@@ -59,13 +60,20 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
     );
   };
 
+  clickPresense = () => {
+    navigateToPath('a/lapnap-live-app', {page: 'presense'});
+  };
+
   renderPresense = () => {
     const {presense} = this.state;
     if (!presense || !presense.results || !presense.results.length) {
       return;
     }
+    const style: CSSProperties = {
+      cursor: 'pointer',
+    };
     return (
-      <div>
+      <div onClick={this.clickPresense} style={style}>
         {presense.results.map(p => {
           return <div key={p.id}>{p.id}</div>;
         })}

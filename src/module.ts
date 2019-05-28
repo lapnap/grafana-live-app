@@ -1,7 +1,7 @@
 import {ExamplePage1} from 'app/config/ExamplePage1';
 import {ExamplePage2} from 'app/config/ExamplePage2';
-import {ExampleRootPage} from 'app/ExampleRootPage';
-import {LiveApp} from 'app/LiveApp';
+import {LiveRootPage} from 'app/LiveRootPage';
+import {app} from 'app/LiveApp';
 import {AppPluginMeta} from '@grafana/ui';
 import {AppOptions} from 'types';
 
@@ -9,8 +9,9 @@ import {AppOptions} from 'types';
 export {ConfigCtrl} from 'app/legacy/config';
 
 // The React Plugin structure
-export const plugin = new LiveApp()
-  .setRootPage(ExampleRootPage)
+export const plugin = app; // Avoid circular loop
+app
+  .setRootPage(LiveRootPage)
   .addConfigPage({
     title: 'Page 1',
     icon: 'fa fa-info',
@@ -24,5 +25,12 @@ export const plugin = new LiveApp()
     id: 'page2',
   });
 
-// HACK!  load the app...
-plugin.init({} as AppPluginMeta<AppOptions>);
+const gui = (window as any).grafanaRuntime;
+if (gui) {
+  gui.getPluginSettings('lapnap-live-app').then((meta: AppPluginMeta) => {
+    gui.importAppPlugin(meta);
+  });
+} else {
+  // HACK!  load the app...
+  plugin.init({} as AppPluginMeta<AppOptions>);
+}
