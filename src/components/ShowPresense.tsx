@@ -5,7 +5,7 @@ import {Unsubscribable, PartialObserver} from 'rxjs';
 
 // Types
 import {PresenseList} from 'feature/PresenseWatcher';
-import {PresenseInfo} from 'types';
+import {PresenseInfo, PresenseKey} from 'types';
 import {LiveApp} from 'app/LiveApp';
 
 export interface Props {
@@ -55,7 +55,7 @@ export class ShowPresense extends PureComponent<Props, State> {
         <span>{p.id}</span>XXX
         <div>
           {Object.keys(p.keys).map(key => {
-            const vals = p.keys[key];
+            const vals = p.keys[key as PresenseKey];
             if (vals && vals.length > 1) {
               return (
                 <span key={key}>

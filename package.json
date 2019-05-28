@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "fingerprintjs2": "^2.1.0",
+    "react-json-view": "^1.19.1",
     "requestidlecallback-polyfill": "^1.0.2"
   },
   "devDependencies": {

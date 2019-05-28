@@ -15,6 +15,7 @@ import {LiveQuery, LiveOptions} from './types';
 import {app} from 'app/LiveApp';
 import {Unsubscribable, PartialObserver} from 'rxjs';
 import {PresenseList} from 'feature/PresenseWatcher';
+import {PresenseKey, SessionDetails} from 'types';
 
 type StreamWorkers = {
   [key: string]: StreamWorker;
@@ -34,6 +35,18 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
 
   getQueryDisplayText(query: LiveQuery) {
     return `${query.subject}`;
+  }
+
+  async getSessionDetais(g: PresenseKey, id: string): Promise<SessionDetails[]> {
+    const url = this.instanceSettings.url;
+    return fetch(url + `events/get/${g}/${id}`, {
+      method: 'GET',
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject('Bad Request');
+    });
   }
 
   async query(

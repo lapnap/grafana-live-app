@@ -1,5 +1,5 @@
 import React, {PureComponent, CSSProperties} from 'react';
-import {LiveAppProps, PresenseInfo} from '../types';
+import {LiveAppProps, PresenseInfo, PresenseKey} from '../types';
 import {Unsubscribable, PartialObserver} from 'rxjs';
 import {LiveAppState} from 'app/LiveApp';
 import {PresenseList} from 'feature/PresenseWatcher';
@@ -74,7 +74,11 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
 
   clickPresense = (p: PresenseInfo) => {
     const {presense} = this.state;
-    navigateToPath('a/lapnap-live-app', {page: 'session', id: p.id, k: presense.groupBy});
+    navigateToPath('a/lapnap-live-app', {
+      page: 'details',
+      id: p.id, // THe detail view
+      g: presense.groupBy,
+    });
   };
 
   renderPresenseTooltip = (p: PresenseInfo) => {
@@ -84,7 +88,7 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
         <div>{p.who.email}</div>
 
         {Object.keys(p.keys).map(key => {
-          const vals = p.keys[key];
+          const vals = p.keys[key as PresenseKey];
           if (vals && vals.length > 1) {
             return (
               <div key={key}>

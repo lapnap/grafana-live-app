@@ -47,7 +47,7 @@ export interface PresenseInfo {
   id: string; //
   who: IdentityInfo; // user id
 
-  keys: KeyValue<string[]>;
+  keys: {[key in PresenseKey]: string[]};
 
   first: QuarumEvent;
   last: QuarumEvent;
@@ -61,6 +61,14 @@ export enum EventType {
 
   // Not a real event, just keeps the session open
   Heartbeat = 'Heartbeat',
+}
+
+export interface SessionDetails {
+  keys: {[key in PresenseKey]: string};
+  start: number;
+  info: KeyValue;
+  first: QuarumEvent;
+  last: QuarumEvent;
 }
 
 //-------------------------
