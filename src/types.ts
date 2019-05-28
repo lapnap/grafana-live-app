@@ -71,6 +71,14 @@ export interface SessionDetails {
   last: QuarumEvent;
 }
 
+export interface LiveEventDetails {
+  id: string;
+  group: PresenseKey;
+  sessions: KeyValue<SessionDetails>;
+  identity: KeyValue<IdentityInfo>;
+  events: QuarumEvent[];
+}
+
 //-------------------------
 //-------------------------
 

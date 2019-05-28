@@ -4,13 +4,13 @@ import ReactJson from 'react-json-view';
 
 // Types
 import {AppRootProps} from '@grafana/ui';
-import {AppOptions, SessionDetails, PresenseKey} from 'types';
+import {AppOptions, SessionDetails, PresenseKey, LiveEventDetails} from 'types';
 import {app} from 'app/LiveApp';
 import {navigateToPath} from 'feature/Navigation';
 
 interface Props extends AppRootProps<AppOptions> {}
 interface State {
-  details: SessionDetails[];
+  details?: LiveEventDetails;
 }
 
 export const DetailsPage_ID = 'details';
@@ -18,9 +18,10 @@ export const DetailsPage_ID = 'details';
 export class DetailsPage extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      details: [],
-    };
+    this.state = {};
+  }
+
+  componentDidMount() {
     this.doQuery();
   }
 
@@ -31,6 +32,7 @@ export class DetailsPage extends PureComponent<Props, State> {
   }
 
   doQuery = async () => {
+    await app.getLiveSocket(1000);
     if (!app.ds) {
       return;
     }
@@ -44,7 +46,7 @@ export class DetailsPage extends PureComponent<Props, State> {
     }
 
     this.setState({
-      details: await app.ds.getSessionDetais(g, id),
+      details: await app.ds.getEventDetais(g, id),
     });
   };
 
@@ -56,19 +58,24 @@ export class DetailsPage extends PureComponent<Props, State> {
     });
   };
 
-  renderDetails(details: SessionDetails, index: number) {
+  renderDetails(details: SessionDetails) {
     const {keys, start, ...rest} = details;
     return (
-      <div key={index + 'A'}>
+      <div key={keys.session}>
         <div>
-          ({index} / {this.state.details.length}) {start}
+          ({keys.session}) {start}
         </div>
         <div>
           {Object.keys(keys).map(s => {
             const key = s as PresenseKey; // typescript
             const v = keys[key];
             return (
-              <a className="btn btn-inverse" onClick={() => this.onClick(key, v)} href="#">
+              <a
+                key={key}
+                className="btn btn-inverse"
+                onClick={() => this.onClick(key, v)}
+                href="#"
+              >
                 {key}
               </a>
             );
@@ -88,15 +95,37 @@ export class DetailsPage extends PureComponent<Props, State> {
 
   render() {
     const {details} = this.state;
-    if (!details || !details.length) {
+    if (!details) {
       return <div>???</div>;
     }
 
     return (
       <div>
-        {details.map((d, index) => {
-          return this.renderDetails(d, index);
-        })}
+        <div>
+          {Object.keys(details.sessions).map(key => {
+            return this.renderDetails(details.sessions[key]);
+          })}
+        </div>
+        <table className="filter-table">
+          <thead>
+            <th>Session</th>
+            <th>Action</th>
+            <th>Key</th>
+            <th>Info</th>
+          </thead>
+          <tbody>
+            {details.events.map(evt => {
+              return (
+                <tr>
+                  <td>{evt.sessionId}</td>
+                  <td>{evt.action}</td>
+                  <td>{evt.key}</td>
+                  <td>{evt.info}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
