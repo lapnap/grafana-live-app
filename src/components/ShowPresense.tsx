@@ -8,7 +8,7 @@ import {PresenseList} from 'feature/PresenseWatcher';
 import {PresenseInfo} from 'types';
 import {LiveApp} from 'app/LiveApp';
 
-interface Props {
+export interface Props {
   app: LiveApp;
 }
 

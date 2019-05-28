@@ -1,17 +1,19 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import {PresencePanel, Props} from './ShowPresense';
+import {ShowPresense, Props} from './ShowPresense';
+import {app} from 'app/LiveApp';
 
 const setup = (propOverrides?: object) => {
   const props: Props = {
-    height: 300,
-    width: 300,
+    app,
   } as Props; // partial
+
+  (props.app as any).uid = 'XXX';
 
   Object.assign(props, propOverrides);
 
-  const wrapper = shallow(<PresencePanel {...props} />);
-  const instance = wrapper.instance() as PresencePanel;
+  const wrapper = shallow(<ShowPresense {...props} />);
+  const instance = wrapper.instance() as ShowPresense;
 
   return {
     instance,

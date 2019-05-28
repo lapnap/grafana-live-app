@@ -1,3 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Render Presense Panel with basic options should render 1`] = `<div />`;
+exports[`Render Presense Panel with basic options should render 1`] = `
+<div>
+  <ShowPresense
+    app={
+      LiveApp {
+        "delayedInit": [Function],
+        "options": Object {
+          "datasource": "",
+        },
+        "pageTracker": PageTracker {
+          "href": "x",
+          "prevPage": "x%34/!",
+          "subject": Subject {
+            "_isScalar": false,
+            "closed": false,
+            "hasError": false,
+            "isStopped": false,
+            "observers": Array [],
+            "thrownError": null,
+          },
+          "watchLocation": [Function],
+        },
+        "pageWatcher": Object {
+          "next": [Function],
+        },
+        "presense": PresenseWatcher {
+          "app": [Circular],
+          "current": Object {
+            "groupBy": "identity",
+            "results": Array [],
+          },
+          "groupBy": "identity",
+          "qid": "XXX",
+          "queryObserver": [Function],
+          "sendQuery": [Function],
+          "subject": Subject {
+            "_isScalar": false,
+            "closed": false,
+            "hasError": false,
+            "isStopped": false,
+            "observers": Array [],
+            "thrownError": null,
+          },
+        },
+        "socketWatcher": Object {
+          "next": [Function],
+        },
+        "state": Object {
+          "loading": false,
+          "streaming": false,
+        },
+        "subject": Subject {
+          "_isScalar": false,
+          "closed": false,
+          "hasError": false,
+          "isStopped": false,
+          "observers": Array [],
+          "thrownError": null,
+        },
+      }
+    }
+  />
+</div>
+`;
