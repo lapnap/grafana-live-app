@@ -60,12 +60,12 @@ export interface SessionDetails {
   info: KeyValue;
 }
 
-export interface PresenseInfo {
+export interface PresenseInfo<T extends QuarumEvent = QuarumEvent> {
   id: string;
   keys?: {[key in PresenseKey]: string[]};
   session?: SessionDetails;
   identity?: IdentityInfo;
-  events: QuarumEvent[];
+  events: T[];
 }
 
 //-------------------------

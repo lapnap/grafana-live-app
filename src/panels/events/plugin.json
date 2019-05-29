@@ -3,7 +3,7 @@
   "name": "Events",
   "id": "lapnap-events-panel",
 
-  "skipDataQuery": true,
+  "skipDataQuery": false,
 
   "info": {
     "author": {

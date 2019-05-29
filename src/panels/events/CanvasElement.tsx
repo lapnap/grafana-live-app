@@ -26,7 +26,7 @@ export interface Props<T = any> {
   width: number | string;
   height: number;
 
-  draw: (ctx: CanvasRenderingContext2D, width: number, height: number) => void;
+  draw: (ctx: CanvasRenderingContext2D, width: number, height: number, data?: T) => void;
 
   onMouseEvent: (info: CanvasMouseCallback<T>) => void;
 
@@ -76,7 +76,9 @@ export class CanvasElement<T> extends PureComponent<Props<T>> {
       ctx.scale(dpr, dpr);
 
       // Draw with the original scale
-      this.props.draw(ctx!, this.rect.width, this.rect.height);
+      this.props.draw(ctx!, this.rect.width, this.rect.height, this.props.data);
+    } else {
+      console.log('No draw', this.props.data);
     }
   };
 

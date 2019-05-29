@@ -56,7 +56,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
           return true;
         }
         if (this.state.error) {
-          console.log('REJECT', this.state.error);
+          console.warn('getLiveSocket REJECT', this.state.error);
           reject(this.state.error);
           return true;
         }
@@ -71,15 +71,19 @@ export class LiveApp extends AppPlugin<AppOptions> {
       const sub = this.subject.subscribe({
         next: (s: LiveAppState) => {
           if (check()) {
-            sub.unsubscribe();
             window.clearTimeout(timer);
+            sub.unsubscribe();
           }
         },
       });
+
+      const start = Date.now();
       timer = window.setTimeout(() => {
         sub.unsubscribe();
+        const duration = Date.now() - start;
         if (!check()) {
-          reject('Not Connected');
+          console.log('Not ConnectedD', time, duration, this);
+          reject('Did not connect within: ' + time);
         }
       }, time);
     });
@@ -163,10 +167,14 @@ export class LiveApp extends AppPlugin<AppOptions> {
       if (!this.live) {
         return;
       }
+
       const msg = evt.isNewPage
         ? {
             action: EventType.PageLoad,
             key: evt.page,
+            info: {
+              query: evt.query,
+            },
           }
         : {
             action: EventType.ParamsChanged,
