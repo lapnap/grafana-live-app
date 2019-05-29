@@ -4,13 +4,14 @@ import ReactJson from 'react-json-view';
 
 // Types
 import {AppRootProps} from '@grafana/ui';
-import {AppOptions, SessionDetails, PresenseKey, LiveEventDetails} from 'types';
+import {AppOptions, SessionDetails, PresenseKey} from 'types';
 import {app} from 'app/LiveApp';
 import {navigateToPath} from 'feature/Navigation';
+import {PresenseList} from 'feature/PresenseWatcher';
 
 interface Props extends AppRootProps<AppOptions> {}
 interface State {
-  details?: LiveEventDetails;
+  details?: PresenseList;
 }
 
 export const DetailsPage_ID = 'details';
@@ -101,27 +102,31 @@ export class DetailsPage extends PureComponent<Props, State> {
 
     return (
       <div>
-        <div>
-          {Object.keys(details.sessions).map(key => {
-            return this.renderDetails(details.sessions[key]);
-          })}
-        </div>
         <table className="filter-table">
           <thead>
-            <th>Session</th>
+            <th>Time</th>
             <th>Action</th>
             <th>Key</th>
             <th>Info</th>
           </thead>
           <tbody>
-            {details.events.map(evt => {
+            {details.results.map(item => {
               return (
-                <tr>
-                  <td>{evt.sessionId}</td>
-                  <td>{evt.action}</td>
-                  <td>{evt.key}</td>
-                  <td>{evt.info}</td>
-                </tr>
+                <>
+                  <tr>
+                    <td colSpan={4}>{this.renderDetails(item.session!)}</td>
+                  </tr>
+                  {item.events.map(evt => {
+                    return (
+                      <tr>
+                        <td>{evt.time}</td>
+                        <td>{evt.action}</td>
+                        <td>{evt.key}</td>
+                        <td>{evt.info}</td>
+                      </tr>
+                    );
+                  })}
+                </>
               );
             })}
           </tbody>

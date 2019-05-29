@@ -28,11 +28,7 @@ export class EventsPanel extends PureComponent<Props, State> {
 
     // Force a redraw
     if (this.state.selection !== selection) {
-      if (selection) {
-        this.setState({selection});
-      }
-    } else {
-      //   console.log( 'MOUSE:', info.type, info.percentX );
+      this.setState({selection});
     }
   };
 

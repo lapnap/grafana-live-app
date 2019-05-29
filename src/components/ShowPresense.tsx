@@ -54,17 +54,18 @@ export class ShowPresense extends PureComponent<Props, State> {
         <img style={this.avatarStyle} src={getAvatarURL(p)} />
         <span>{p.id}</span>XXX
         <div>
-          {Object.keys(p.keys).map(key => {
-            const vals = p.keys[key as PresenseKey];
-            if (vals && vals.length > 1) {
-              return (
-                <span key={key}>
-                  {key}: {vals.length}
-                </span>
-              );
-            }
-            return null;
-          })}
+          {p.keys &&
+            Object.keys(p.keys).map(key => {
+              const vals = p.keys![key as PresenseKey];
+              if (vals && vals.length > 1) {
+                return (
+                  <span key={key}>
+                    {key}: {vals.length}
+                  </span>
+                );
+              }
+              return null;
+            })}
         </div>
       </div>
     );
@@ -88,8 +89,8 @@ export class ShowPresense extends PureComponent<Props, State> {
 }
 
 export function getAvatarURL(p: PresenseInfo) {
-  if (p.who && p.who.avatar) {
-    return p.who.avatar;
+  if (p.identity && p.identity.avatar) {
+    return p.identity.avatar;
   }
-  return '/avatar/x-' + p.id;
+  return '/avatar/x_' + p.id;
 }

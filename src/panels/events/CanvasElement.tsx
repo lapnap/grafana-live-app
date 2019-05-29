@@ -100,6 +100,9 @@ export class CanvasElement<T> extends PureComponent<Props<T>> {
   };
 
   onMouseEnter = (evt: MouseEvent) => {
+    if (this.down && !evt.button) {
+      this.down = undefined;
+    }
     this.sendMouseEvent(MouseEvtType.enter, evt);
   };
 

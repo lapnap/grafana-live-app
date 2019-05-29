@@ -43,16 +43,6 @@ export enum PresenseKey {
   fingerprint = 'fingerprint',
 }
 
-export interface PresenseInfo {
-  id: string; //
-  who: IdentityInfo; // user id
-
-  keys: {[key in PresenseKey]: string[]};
-
-  first: QuarumEvent;
-  last: QuarumEvent;
-}
-
 export enum EventType {
   Connect = 'Connect', // Connect to server
   PageLoad = 'PageLoad', // URL Changed
@@ -64,18 +54,17 @@ export enum EventType {
 }
 
 export interface SessionDetails {
-  keys: {[key in PresenseKey]: string};
+  keys: SessionKeys;
   start: number;
+  host: string;
   info: KeyValue;
-  first: QuarumEvent;
-  last: QuarumEvent;
 }
 
-export interface LiveEventDetails {
+export interface PresenseInfo {
   id: string;
-  group: PresenseKey;
-  sessions: KeyValue<SessionDetails>;
-  identity: KeyValue<IdentityInfo>;
+  keys?: {[key in PresenseKey]: string[]};
+  session?: SessionDetails;
+  identity?: IdentityInfo;
   events: QuarumEvent[];
 }
 

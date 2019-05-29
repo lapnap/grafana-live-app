@@ -15,7 +15,7 @@ import {LiveQuery, LiveOptions} from './types';
 import {app} from 'app/LiveApp';
 import {Unsubscribable, PartialObserver} from 'rxjs';
 import {PresenseList} from 'feature/PresenseWatcher';
-import {PresenseKey, LiveEventDetails} from 'types';
+import {PresenseKey} from 'types';
 
 type StreamWorkers = {
   [key: string]: StreamWorker;
@@ -37,7 +37,7 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
     return `${query.subject}`;
   }
 
-  async getEventDetais(g: PresenseKey, id: string): Promise<LiveEventDetails> {
+  async getEventDetais(g: PresenseKey, id: string): Promise<PresenseList> {
     const url = this.instanceSettings.url;
     return fetch(url + `events/live/${g}/${id}`, {
       method: 'GET',
@@ -177,11 +177,11 @@ export class PresenseWorker extends StreamWorker {
       refId: this.query.refId,
       fields: [
         {name: 'id', type: FieldType.string},
-        {name: 'first_time', type: FieldType.time},
-        {name: 'first_action', type: FieldType.string},
-        {name: 'last_time', type: FieldType.time},
-        {name: 'last_action', type: FieldType.string},
-        {name: 'who_login', type: FieldType.string},
+        {name: 'login', type: FieldType.string},
+        // {name: 'first_action', type: FieldType.string},
+        // {name: 'last_time', type: FieldType.time},
+        // {name: 'last_action', type: FieldType.string},
+        // {name: 'who_login', type: FieldType.string},
       ],
       rows: [],
     };
@@ -189,11 +189,7 @@ export class PresenseWorker extends StreamWorker {
     for (const p of presense.results) {
       series.rows.push([
         p.id,
-        p.first.time,
-        p.first.action,
-        p.last.time,
-        p.last.action,
-        p.who.login,
+        'xxx', //p.identity.login,
       ]);
     }
 

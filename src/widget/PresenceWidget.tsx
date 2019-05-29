@@ -84,20 +84,24 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
   renderPresenseTooltip = (p: PresenseInfo) => {
     return (
       <div>
-        <div>{p.who.login}</div>
-        <div>{p.who.email}</div>
-
-        {Object.keys(p.keys).map(key => {
-          const vals = p.keys[key as PresenseKey];
-          if (vals && vals.length > 1) {
-            return (
-              <div key={key}>
-                {key}: {vals.length}
-              </div>
-            );
-          }
-          return null;
-        })}
+        {p.identity && (
+          <>
+            <div>{p.identity.login}</div>
+            <div>{p.identity.email}</div>
+          </>
+        )}
+        {p.keys &&
+          Object.keys(p.keys).map(key => {
+            const vals = p.keys![key as PresenseKey];
+            if (vals && vals.length > 1) {
+              return (
+                <div key={key}>
+                  {key}: {vals.length}
+                </div>
+              );
+            }
+            return null;
+          })}
       </div>
     );
   };

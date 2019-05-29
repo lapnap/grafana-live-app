@@ -10,6 +10,7 @@ export interface LongerList<T> {
 }
 
 export interface PresenseList extends LongerList<PresenseInfo> {
+  id?: String;
   groupBy: PresenseKey;
 }
 
