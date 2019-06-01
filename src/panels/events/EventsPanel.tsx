@@ -3,7 +3,15 @@ import React, {PureComponent, CSSProperties} from 'react';
 
 // Types
 import {EventsOptions} from './types';
-import {PanelProps, dateTime, colors, RawTimeRange, TimeRange} from '@grafana/ui';
+import {
+  PanelProps,
+  dateTime,
+  colors,
+  RawTimeRange,
+  TimeRange,
+  Select,
+  SelectOptionItem,
+} from '@grafana/ui';
 import {CanvasElement, CanvasMouseCallback, MouseEvtType} from './CanvasElement';
 import {PresenseList, LongerList} from 'feature/PresenseWatcher';
 import {Unsubscribable, PartialObserver} from 'rxjs';
@@ -23,13 +31,14 @@ interface EventDataList extends LongerList<PresenseInfo<QuarumEventEx>> {
   id?: String;
   groupBy: PresenseKey;
   timeRange: RawTimeRange;
+  hover?: number;
 }
 
 interface State {
   selection?: CanvasMouseCallback;
-  groupBy: PresenseKey;
+  groupBy?: PresenseKey;
   info?: EventDataList;
-  id?: String;
+  id?: string;
 
   // Current Presense Results
   current?: PresenseList;
@@ -40,9 +49,7 @@ export class EventsPanel extends PureComponent<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {
-      groupBy: PresenseKey.identity,
-    };
+    this.state = {};
   }
 
   async componentDidMount() {
@@ -55,16 +62,26 @@ export class EventsPanel extends PureComponent<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
+  async componentDidUpdate(prevProps: Props, prevState: State) {
     const {timeRange, width} = this.props;
+    const {id, groupBy} = this.state;
+
     let needsUpdate = false;
-    if (timeRange !== prevProps.timeRange || width !== prevProps.width) {
+    if (
+      timeRange !== prevProps.timeRange ||
+      width !== prevProps.width ||
+      id !== prevState.id ||
+      groupBy != prevState.groupBy
+    ) {
       needsUpdate = true;
     }
 
     // Update our view of the data
     if (needsUpdate) {
-      const input = this.state.current;
+      let input = this.state.current;
+      if (groupBy && app.ds) {
+        input = await app.ds.getEventDetais(groupBy, id);
+      }
       if (input) {
         this.setState({
           info: toEventDataList(input, timeRange, width),
@@ -87,21 +104,40 @@ export class EventsPanel extends PureComponent<Props, State> {
     },
   };
 
-  onMouseEvent = (info: CanvasMouseCallback) => {
+  onMouseEvent = (info: CanvasMouseCallback<PresenseInfo<QuarumEventEx>>) => {
     let selection: CanvasMouseCallback | undefined = undefined;
-    if (info.type === MouseEvtType.drag) {
+    let hover: number | undefined = undefined;
+    const {type, data, start, offsetX, percentX} = info;
+
+    // Find the hover item
+    if (data && type !== MouseEvtType.leave && data.events) {
+      for (let i = 0; i < data.events.length; i++) {
+        const evt = data.events[i];
+        if (evt.x >= offsetX) {
+          hover = i;
+        } else if (evt.x < offsetX) {
+          break;
+        }
+      }
+    }
+
+    if (type === MouseEvtType.drag) {
       selection = info;
-    } else if (info.type === MouseEvtType.up) {
+    } else if (type === MouseEvtType.up) {
       const {timeRange} = this.props;
       const min = timeRange.from.valueOf();
       const size = timeRange.to.valueOf() - min;
-      const t1 = min + info.percentX * size;
+      const t1 = min + percentX * size;
+
+      if (!start) {
+        return;
+      }
 
       // Moved less than 5pixels
-      if (Math.abs(info.offsetX - info.start!.offsetX) < 5) {
+      if (Math.abs(offsetX - start!.offsetX) < 5) {
         alert('Clicked:' + t1);
       } else {
-        const t0 = min + info.start!.percentX * size;
+        const t0 = min + start!.percentX * size;
         zoomToTimeRange({
           from: dateTime(Math.min(t0, t1)),
           to: dateTime(Math.max(t0, t1)),
@@ -210,7 +246,11 @@ export class EventsPanel extends PureComponent<Props, State> {
           const vals = p.keys![key as PresenseKey];
           if (vals && vals.length > 1) {
             return (
-              <button className="btn btn-small btn-inverse" key={key}>
+              <button
+                className="btn btn-small btn-inverse"
+                key={key}
+                onClick={() => this.setState({groupBy: key as PresenseKey})}
+              >
                 {key}: {vals.length}
               </button>
             );
@@ -221,20 +261,57 @@ export class EventsPanel extends PureComponent<Props, State> {
     );
   }
 
+  onGroupByChange = (item: SelectOptionItem<PresenseKey>) => {
+    this.setState({groupBy: item.value, id: undefined});
+  };
+
   renderControls() {
+    const items = Object.keys(PresenseKey).map(k => {
+      return {
+        value: k as PresenseKey,
+        label: k,
+      };
+    });
+    items.push({
+      value: (undefined as unknown) as PresenseKey,
+      label: '-- group by --',
+    });
+
     return (
       <div style={{width: '100%'}}>
         <div style={{float: 'right'}}>
           <button
             className="btn btn-inverse"
             onClick={() => {
-              zoomToTimeRange(this.state.info!.timeRange);
+              const v = this.state.info!.timeRange;
+              zoomToTimeRange({
+                from: v.from,
+                to: 'now',
+              });
             }}
           >
             Zoom to full range
           </button>
         </div>
-        TODO SELECT dropdown
+
+        <div style={{display: 'inline-block'}}>
+          <Select
+            options={items}
+            value={items.find(i => i.value === this.state.groupBy)}
+            onChange={this.onGroupByChange}
+            placeholder="group by"
+          />
+        </div>
+        {this.state.id && (
+          <button
+            className="btn btn-inverse"
+            onClick={() => {
+              this.setState({groupBy: undefined, id: undefined});
+            }}
+          >
+            {this.state.id}
+          </button>
+        )}
       </div>
     );
   }
@@ -285,15 +362,38 @@ export class EventsPanel extends PureComponent<Props, State> {
         <div
           style={{
             overflow: 'scroll',
-            height,
+            height: height - 45,
           }}
         >
           {info.results.map(item => {
             return (
               <div key={item.id}>
-                <div>
-                  {item.identity && <img style={this.avatarStyle} src={getAvatarURL(item)} />}
-                  <span>{item.id}</span>
+                <div style={{cursor: 'pointer'}}>
+                  {item.identity && (
+                    <span
+                      onClick={() => {
+                        this.setState({
+                          groupBy: PresenseKey.identity,
+                          id: item.identity!.login,
+                        });
+                      }}
+                    >
+                      <img style={this.avatarStyle} src={getAvatarURL(item)} />
+                      {item.identity!.login !== item.id && <span>{item.identity!.login}: </span>}
+                    </span>
+                  )}
+                  <span
+                    onClick={() => {
+                      this.setState({
+                        groupBy: info.groupBy,
+                        id: item.id,
+                      });
+                    }}
+                  >
+                    {item.id}
+                  </span>
+                  {app.isCurrentSession(info.groupBy, item.id) && <span>(current)</span>}
+
                   {this.renderKeysInfo(item)}
                 </div>
 

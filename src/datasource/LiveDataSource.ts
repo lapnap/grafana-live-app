@@ -37,9 +37,9 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
     return `${query.subject}`;
   }
 
-  async getEventDetais(g: PresenseKey, id: string): Promise<PresenseList> {
+  async getEventDetais(g: PresenseKey, id?: string): Promise<PresenseList> {
     const url = this.instanceSettings.url;
-    return fetch(url + `events/live/${g}/${id}`, {
+    return fetch(url + `events/live/${g}` + (id ? `/${id}` : ''), {
       method: 'GET',
     }).then(response => {
       if (response.ok) {

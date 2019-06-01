@@ -1,6 +1,6 @@
 import {AppPlugin, AppPluginMeta} from '@grafana/ui';
 
-import {AppOptions, EventType, ConnectionInfo, IdentityInfo} from 'types';
+import {AppOptions, EventType, ConnectionInfo, IdentityInfo, PresenseKey} from 'types';
 import {LiveSocket, LiveSocketState} from 'feature/LiveSocket';
 import {PartialObserver, Subject} from 'rxjs';
 import {PageTracker, PageEvent} from 'feature/PageTracker';
@@ -43,6 +43,17 @@ export class LiveApp extends AppPlugin<AppOptions> {
 
     // Initalize in a little bit
     setTimeout(this.delayedInit, 100);
+  }
+
+  /**
+   * Check if a value matches the current session
+   */
+  isCurrentSession(g: PresenseKey, id: string) {
+    const {connection} = this.state;
+    if (!connection) {
+      return false;
+    }
+    return connection.keys[g] === id;
   }
 
   /**

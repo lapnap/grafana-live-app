@@ -1,5 +1,5 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import ReactJson from 'react-json-view';
 
 // Types
@@ -104,29 +104,31 @@ export class DetailsPage extends PureComponent<Props, State> {
       <div>
         <table className="filter-table">
           <thead>
-            <th>Time</th>
-            <th>Action</th>
-            <th>Key</th>
-            <th>Info</th>
+            <tr>
+              <th>Time</th>
+              <th>Action</th>
+              <th>Key</th>
+              <th>Info</th>
+            </tr>
           </thead>
           <tbody>
-            {details.results.map(item => {
+            {details.results.map((item, index) => {
               return (
-                <>
+                <Fragment key={item.id}>
                   <tr>
                     <td colSpan={4}>{this.renderDetails(item.session!)}</td>
                   </tr>
-                  {item.events.map(evt => {
+                  {item.events.map((evt, index) => {
                     return (
-                      <tr>
+                      <tr key={`${item.id}.${index}`}>
                         <td>{evt.time}</td>
                         <td>{evt.action}</td>
                         <td>{evt.key}</td>
-                        <td>{evt.info}</td>
+                        <td>{JSON.stringify(evt.info)}</td>
                       </tr>
                     );
                   })}
-                </>
+                </Fragment>
               );
             })}
           </tbody>
