@@ -135,7 +135,7 @@ export class EventsPanel extends PureComponent<Props, State> {
 
       // Moved less than 5pixels
       if (Math.abs(offsetX - start!.offsetX) < 5) {
-        alert('Clicked:' + t1);
+        alert('Clicked:' + t1 + ' :: ' + hover);
       } else {
         const t0 = min + start!.percentX * size;
         zoomToTimeRange({
@@ -155,7 +155,7 @@ export class EventsPanel extends PureComponent<Props, State> {
     ctx: CanvasRenderingContext2D,
     width: number,
     height: number,
-    info: PresenseInfo<QuarumEventEx>
+    info?: PresenseInfo<QuarumEventEx>
   ) => {
     // Clear the background
     ctx.fillStyle = '#333';
@@ -163,6 +163,10 @@ export class EventsPanel extends PureComponent<Props, State> {
 
     ctx.lineWidth = 1;
     ctx.font = '14px "Open Sans", Helvetica, Arial, sans-serif';
+
+    if (!info) {
+      return;
+    }
 
     if (!info.events) {
       ctx.fillStyle = '#d8d9da';
