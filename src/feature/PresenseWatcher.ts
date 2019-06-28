@@ -10,7 +10,7 @@ export interface LongerList<T> {
 }
 
 export interface PresenseList extends LongerList<PresenseInfo> {
-  id?: String;
+  id?: string;
   groupBy: PresenseKey;
 }
 
@@ -46,7 +46,7 @@ export class PresenseWatcher {
   };
 
   queryObserver = (v: QueryResponse<PresenseList>) => {
-    let current = v.value;
+    const current = v.value;
     if (v.action === QueryResponseAction.Remove) {
       console.log('REMOVE', v.value);
     }
@@ -59,9 +59,7 @@ export class PresenseWatcher {
 
     if (this.subject.observers.length) {
       this.subject.next(this.current);
-    }
-    // If noone is listening, just cancel
-    else if (this.app.live) {
+    }else if (this.app.live) {
       this.app.live.cancel(this.qid);
     }
   };

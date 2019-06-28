@@ -9,7 +9,7 @@ import {app} from 'app/LiveApp';
 
 interface Props extends AppRootProps<AppOptions> {}
 
-export const PresensePage_ID = 'presense';
+export const PresensePageID = 'presense';
 
 export class PresensePage extends PureComponent<Props> {
   constructor(props: Props) {

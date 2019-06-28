@@ -14,7 +14,7 @@ interface State {
   details?: PresenseList;
 }
 
-export const DetailsPage_ID = 'details';
+export const DetailsPageID = 'details';
 
 export class DetailsPage extends PureComponent<Props, State> {
   constructor(props: Props) {
@@ -53,7 +53,7 @@ export class DetailsPage extends PureComponent<Props, State> {
 
   onClick = (g: PresenseKey, id: string) => {
     navigateToPath('a/lapnap-live-app', {
-      page: DetailsPage_ID,
+      page: DetailsPageID,
       id,
       g,
     });

@@ -7,8 +7,8 @@ export interface PageEvent {
 }
 
 export class PageTracker {
-  private prevPage: string = 'x%34/!';
-  private href: string = 'x';
+  private prevPage = 'x%34/!';
+  private href = 'x';
   private subject = new Subject<PageEvent>();
 
   subscribe(observer: PartialObserver<PageEvent>): Unsubscribable {
@@ -36,7 +36,7 @@ export class PageTracker {
     }
   }
 
-  watchLocationHref(interval: number = 500) {
+  watchLocationHref(interval = 500) {
     window.setInterval(this.watchLocation, interval);
   }
 

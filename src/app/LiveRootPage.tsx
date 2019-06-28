@@ -4,8 +4,8 @@ import React, {PureComponent} from 'react';
 // Types
 import {AppRootProps, NavModelItem} from '@grafana/ui';
 import {AppOptions} from 'types';
-import {PresensePage, PresensePage_ID} from './page/PresensePage';
-import {DetailsPage_ID, DetailsPage} from '././page/DetailsPage';
+import {PresensePage, PresensePageID} from './page/PresensePage';
+import {DetailsPageID, DetailsPage} from '././page/DetailsPage';
 
 interface Props extends AppRootProps<AppOptions> {}
 
@@ -31,21 +31,21 @@ export class LiveRootPage extends PureComponent<Props> {
 
     // Set the active tab
     let found = false;
-    const selected = query.page || PresensePage_ID;
+    const selected = query.page || PresensePageID;
     const tabs: NavModelItem[] = [];
     tabs.push({
       text: 'Presense',
       icon: 'fa fa-fw fa-file-text-o',
-      url: path + '?page=' + PresensePage_ID,
-      id: PresensePage_ID,
+      url: path + '?page=' + PresensePageID,
+      id: PresensePageID,
     });
 
-    if (selected === DetailsPage_ID) {
+    if (selected === DetailsPageID) {
       tabs.push({
         text: 'Details',
         icon: 'fa fa-fw fa-file-text-o',
-        url: path + '?page=' + DetailsPage_ID,
-        id: DetailsPage_ID,
+        url: path + '?page=' + DetailsPageID,
+        id: DetailsPageID,
       });
     }
 
@@ -77,10 +77,10 @@ export class LiveRootPage extends PureComponent<Props> {
   render() {
     const {path, query} = this.props;
 
-    const selected = query.page || PresensePage_ID;
-    if (selected === PresensePage_ID) {
+    const selected = query.page || PresensePageID;
+    if (selected === PresensePageID) {
       return <PresensePage {...this.props} />;
-    } else if (selected === DetailsPage_ID) {
+    } else if (selected === DetailsPageID) {
       return <DetailsPage {...this.props} />;
     }
 

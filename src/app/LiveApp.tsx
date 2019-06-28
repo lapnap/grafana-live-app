@@ -119,7 +119,6 @@ export class LiveApp extends AppPlugin<AppOptions> {
     if (this.options.datasource) {
       try {
         this.ds = await (window as any).grafanaRuntime.datasourceSrv.get(this.options.datasource);
-        this.state;
       } catch (err) {}
     }
 

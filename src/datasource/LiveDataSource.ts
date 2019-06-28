@@ -58,7 +58,7 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
       return Promise.reject('Faild to get Live Socket');
     }
 
-    let resp: DataQueryResponse = {data: []};
+    const resp: DataQueryResponse = {data: []};
     for (const query of req.targets) {
       // create stream key
       const key = req.dashboardId + '/' + req.panelId + '/' + query.refId;
