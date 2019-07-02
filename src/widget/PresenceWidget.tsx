@@ -1,7 +1,7 @@
 import React, {PureComponent, CSSProperties} from 'react';
 import {LiveAppProps, PresenseInfo, PresenseKey} from '../types';
 import {Unsubscribable, PartialObserver} from 'rxjs';
-import {LiveAppState} from 'app/LiveApp';
+import {LiveAppState} from '../app/LiveApp';
 import {PresenseList} from 'feature/PresenseWatcher';
 import {navigateToPath} from 'feature/Navigation';
 import {getAvatarURL} from 'components/ShowPresense';

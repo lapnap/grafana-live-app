@@ -5,11 +5,11 @@ import React, {PureComponent} from 'react';
 import {AppRootProps} from '@grafana/ui';
 import {AppOptions} from 'types';
 import {ShowPresense} from 'components/ShowPresense';
-import {app} from 'app/LiveApp';
+import {app} from '../../app/LiveApp';
 
 interface Props extends AppRootProps<AppOptions> {}
 
-export const PresensePage_ID = 'presense';
+export const presensePageID = 'presense';
 
 export class PresensePage extends PureComponent<Props> {
   constructor(props: Props) {

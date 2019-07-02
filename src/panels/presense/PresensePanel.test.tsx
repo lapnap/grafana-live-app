@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {PresencePanel, Props} from './PresencePanel';
-import {app} from 'app/LiveApp';
+import {app} from '../../app/LiveApp';
 (app.presense as any).qid = 'XXX';
 
 const setup = (propOverrides?: object) => {

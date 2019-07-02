@@ -46,10 +46,10 @@ export async function startNewSession(
       }),
     })
   ).then(async response => {
-    if (response.status == 200) {
+    if (response.status === 200) {
       return (await response.json()) as ConnectionInfo;
     }
-    if (response.status == 404) {
+    if (response.status === 404) {
       throw new Error('Server Not Running');
     }
     console.error('Error Starting Session: ', response);

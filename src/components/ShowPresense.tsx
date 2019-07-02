@@ -6,7 +6,7 @@ import {Unsubscribable, PartialObserver} from 'rxjs';
 // Types
 import {PresenseList} from 'feature/PresenseWatcher';
 import {PresenseInfo, PresenseKey} from 'types';
-import {LiveApp} from 'app/LiveApp';
+import {LiveApp} from '../app/LiveApp';
 
 export interface Props {
   app: LiveApp;

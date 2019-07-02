@@ -5,7 +5,7 @@ import ReactJson from 'react-json-view';
 // Types
 import {AppRootProps} from '@grafana/ui';
 import {AppOptions, SessionDetails, PresenseKey} from 'types';
-import {app} from 'app/LiveApp';
+import {app} from '../LiveApp';
 import {navigateToPath} from 'feature/Navigation';
 import {PresenseList} from 'feature/PresenseWatcher';
 
@@ -14,7 +14,7 @@ interface State {
   details?: PresenseList;
 }
 
-export const DetailsPage_ID = 'details';
+export const detailsPageID = 'details';
 
 export class DetailsPage extends PureComponent<Props, State> {
   constructor(props: Props) {
@@ -53,7 +53,7 @@ export class DetailsPage extends PureComponent<Props, State> {
 
   onClick = (g: PresenseKey, id: string) => {
     navigateToPath('a/lapnap-live-app', {
-      page: DetailsPage_ID,
+      page: detailsPageID,
       id,
       g,
     });

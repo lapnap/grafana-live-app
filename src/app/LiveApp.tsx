@@ -1,4 +1,4 @@
-import {AppPlugin, AppPluginMeta} from '@grafana/ui';
+import {AppPlugin} from '@grafana/ui';
 
 import {AppOptions, EventType, ConnectionInfo, IdentityInfo, PresenseKey} from 'types';
 import {LiveSocket, LiveSocketState} from 'feature/LiveSocket';
@@ -31,7 +31,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
   readonly presense = new PresenseWatcher(this);
   readonly pageTracker = new PageTracker();
 
-  init(meta: AppPluginMeta<AppOptions>) {
+  init(meta: any) {
     if (this.live) {
       console.log('LIVE Already initalized....');
       return;
@@ -119,11 +119,11 @@ export class LiveApp extends AppPlugin<AppOptions> {
     if (this.options.datasource) {
       try {
         this.ds = await (window as any).grafanaRuntime.datasourceSrv.get(this.options.datasource);
-        this.state;
+        // this.state;
       } catch (err) {}
     }
 
-    const user = window.grafanaBootData.user;
+    const user = (window as any).grafanaBootData.user;
     const member: IdentityInfo = {
       login: user.login,
       email: user.email,

@@ -1,12 +1,12 @@
-import {ExamplePage1} from 'app/config/ExamplePage1';
-import {ExamplePage2} from 'app/config/ExamplePage2';
-import {LiveRootPage} from 'app/LiveRootPage';
-import {app} from 'app/LiveApp';
+import {ExamplePage1} from './app/config/ExamplePage1';
+import {ExamplePage2} from './app/config/ExamplePage2';
+import {LiveRootPage} from './app/LiveRootPage';
+import {app} from './app/LiveApp';
 import {AppPluginMeta} from '@grafana/ui';
 import {AppOptions} from 'types';
 
 // Needed to get an enable/disable button
-export {ConfigCtrl} from 'app/legacy/config';
+export {ConfigCtrl} from './app/legacy/config';
 
 // The React Plugin structure
 export const plugin = app; // Avoid circular loop
@@ -26,6 +26,7 @@ app
   });
 
 const gui = (window as any).grafanaRuntime;
+
 if (gui) {
   gui.getPluginSettings('lapnap-live-app').then((meta: AppPluginMeta) => {
     gui.importAppPlugin(meta);

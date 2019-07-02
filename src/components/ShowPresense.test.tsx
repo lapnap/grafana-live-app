@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {ShowPresense, Props} from './ShowPresense';
-import {app} from 'app/LiveApp';
+import {app} from '../app/LiveApp';
 
 const setup = (propOverrides?: object) => {
   const props: Props = {

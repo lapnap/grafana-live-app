@@ -15,7 +15,7 @@ import {
 import {CanvasElement, CanvasMouseCallback, MouseEvtType} from './CanvasElement';
 import {PresenseList, LongerList} from 'feature/PresenseWatcher';
 import {Unsubscribable, PartialObserver} from 'rxjs';
-import {app} from 'app/LiveApp';
+import {app} from '../../app/LiveApp';
 import {PresenseInfo, EventType, PresenseKey, QuarumEvent} from 'types';
 import {zoomToTimeRange} from 'feature/Navigation';
 import {getAvatarURL} from 'components/ShowPresense';
@@ -28,7 +28,7 @@ interface QuarumEventEx extends QuarumEvent {
 }
 
 interface EventDataList extends LongerList<PresenseInfo<QuarumEventEx>> {
-  id?: String;
+  id?: string;
   groupBy: PresenseKey;
   timeRange: RawTimeRange;
   hover?: number;
@@ -71,7 +71,7 @@ export class EventsPanel extends PureComponent<Props, State> {
       timeRange !== prevProps.timeRange ||
       width !== prevProps.width ||
       id !== prevState.id ||
-      groupBy != prevState.groupBy
+      groupBy !== prevState.groupBy
     ) {
       needsUpdate = true;
     }
@@ -426,7 +426,7 @@ function toEventDataList(
   const min = timeRange.from.valueOf();
   const size = timeRange.to.valueOf() - min;
 
-  const val: PresenseInfo<QuarumEventEx>[] = presense.results.map(p => {
+  const val: Array<PresenseInfo<QuarumEventEx>> = presense.results.map(p => {
     const sorted = p.events.map(evt => {
       const percent = (evt.time - min) / size;
       return {
