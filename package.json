@@ -21,32 +21,26 @@
     "url": "https://github.com/ryantxu/grafana-firebase-app.git"
   },
   "dependencies": {
+    "@types/react-dom": "^16.8.4",
     "fingerprintjs2": "^2.1.0",
     "react-json-view": "^1.19.1",
     "requestidlecallback-polyfill": "^1.0.2"
   },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
   "devDependencies": {
+    "@grafana/toolkit": "next",
     "@grafana/ui": "next",
     "@types/enzyme": "^3.9.4",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/fingerprintjs2": "^2.0.0",
     "@types/grafana": "github:CorpGlory/types-grafana",
-    "@types/jest": "^24.0.13",
-    "@types/jquery": "^3.3.30",
-    "@types/lodash": "4.14.132",
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.11.2",
     "enzyme-to-json": "3.3.5",
-    "grafana-sdk-mocks": "github:ryantxu/grafana-sdk-mocks",
-    "jest": "^24.8.0",
-    "jquery": "^3.4.1",
-    "lodash": "4.17.11",
-    "moment": "2.24.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "rxjs": "^6.5.2",
-    "ts-jest": "^24.0.2",
-    "tslib": "^1.10.0",
-    "typescript": "^3.5.2"
+    "grafana-sdk-mocks": "github:ryantxu/grafana-sdk-mocks"
   }
 }
