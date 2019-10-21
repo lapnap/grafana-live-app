@@ -1,11 +1,11 @@
-import React, {PureComponent, CSSProperties} from 'react';
-import {LiveAppProps, PresenseInfo, PresenseKey} from '../types';
-import {Unsubscribable, PartialObserver} from 'rxjs';
-import {LiveAppState} from 'app/LiveApp';
-import {PresenseList} from 'feature/PresenseWatcher';
-import {navigateToPath} from 'feature/Navigation';
-import {getAvatarURL} from 'components/ShowPresense';
-import {Tooltip} from '@grafana/ui';
+import React, { PureComponent, CSSProperties } from 'react';
+import { LiveAppProps, PresenseInfo, PresenseKey } from '../types';
+import { Unsubscribable, PartialObserver } from 'rxjs';
+import { LiveAppState } from 'app/LiveApp';
+import { PresenseList } from 'feature/PresenseWatcher';
+import { navigateToPath } from 'feature/Navigation';
+import { getAvatarURL } from 'components/ShowPresense';
+import { Tooltip } from '@grafana/ui';
 
 interface State {
   app: LiveAppState;
@@ -24,7 +24,7 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
   }
 
   componentDidMount() {
-    const {app} = this.props;
+    const { app } = this.props;
 
     this.subscriptions.push(app.subject.subscribe(this.appObserver));
     this.subscriptions.push(app.presense.subscribe(this.presenseObserver));
@@ -40,17 +40,17 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
   // Track any page activity with the server
   appObserver: PartialObserver<LiveAppState> = {
     next: (app: LiveAppState) => {
-      this.setState({app});
+      this.setState({ app });
     },
   };
   presenseObserver: PartialObserver<PresenseList> = {
     next: (presense: PresenseList) => {
-      this.setState({presense});
+      this.setState({ presense });
     },
   };
 
   renderStatus = () => {
-    const {presense} = this.state;
+    const { presense } = this.state;
     if (presense && presense.results && presense.results.length) {
       return null; // nothing!
     }
@@ -60,8 +60,8 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
       padding: '4px',
     };
 
-    const {app} = this.state;
-    const {connection, error, loading, streaming} = app;
+    const { app } = this.state;
+    const { connection, error, loading, streaming } = app;
     return (
       <div style={wrapStyle}>
         {connection && <span>{connection.keys.identity}</span>}
@@ -73,7 +73,7 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
   };
 
   clickPresense = (p: PresenseInfo) => {
-    const {presense} = this.state;
+    const { presense } = this.state;
     navigateToPath('a/lapnap-live-app', {
       page: 'details',
       id: p.id, // THe detail view
@@ -107,7 +107,7 @@ export class PresenceWidget extends PureComponent<LiveAppProps, State> {
   };
 
   renderPresense = () => {
-    const {presense} = this.state;
+    const { presense } = this.state;
     if (!presense || !presense.results || !presense.results.length) {
       return;
     }

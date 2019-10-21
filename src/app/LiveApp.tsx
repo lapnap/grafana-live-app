@@ -1,13 +1,13 @@
-import {AppPlugin, AppPluginMeta} from '@grafana/ui';
+import { AppPlugin, AppPluginMeta } from '@grafana/ui';
 
-import {AppOptions, EventType, ConnectionInfo, IdentityInfo, PresenseKey} from 'types';
-import {LiveSocket, LiveSocketState} from 'feature/LiveSocket';
-import {PartialObserver, Subject} from 'rxjs';
-import {PageTracker, PageEvent} from 'feature/PageTracker';
-import {PresenseWatcher} from 'feature/PresenseWatcher';
-import {LapnapWidgets} from 'widget/LapnapWidgets';
-import {startNewSession} from 'feature/session';
-import {LiveDataSource} from 'datasource/LiveDataSource';
+import { AppOptions, EventType, ConnectionInfo, IdentityInfo, PresenseKey } from 'types';
+import { LiveSocket, LiveSocketState } from 'feature/LiveSocket';
+import { PartialObserver, Subject } from 'rxjs';
+import { PageTracker, PageEvent } from 'feature/PageTracker';
+import { PresenseWatcher } from 'feature/PresenseWatcher';
+import { LapnapWidgets } from 'widget/LapnapWidgets';
+import { startNewSession } from 'feature/session';
+import { LiveDataSource } from 'datasource/LiveDataSource';
 
 export interface LiveAppState {
   loading: boolean;
@@ -20,7 +20,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
   ds?: LiveDataSource;
   live?: LiveSocket;
   widgets?: LapnapWidgets;
-  options: AppOptions = {datasource: ''};
+  options: AppOptions = { datasource: '' };
 
   private state: LiveAppState = {
     loading: false,
@@ -49,7 +49,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
    * Check if a value matches the current session
    */
   isCurrentSession(g: PresenseKey, id: string) {
-    const {connection} = this.state;
+    const { connection } = this.state;
     if (!connection) {
       return false;
     }
@@ -101,7 +101,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
   }
 
   getState() {
-    return {...this.state};
+    return { ...this.state };
   }
 
   setState(update: Partial<LiveAppState>) {
@@ -113,7 +113,7 @@ export class LiveApp extends AppPlugin<AppOptions> {
   }
 
   delayedInit = async () => {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     this.widgets = new LapnapWidgets(this);
 
     if (this.options.datasource) {

@@ -1,10 +1,10 @@
 // Libraries
-import React, {PureComponent, ChangeEvent} from 'react';
+import React, { PureComponent, ChangeEvent } from 'react';
 
 // Types
-import {LiveOptions} from './types';
+import { LiveOptions } from './types';
 
-import {DataSourcePluginOptionsEditorProps, DataSourceSettings, FormField} from '@grafana/ui';
+import { DataSourcePluginOptionsEditorProps, DataSourceSettings, FormField } from '@grafana/ui';
 
 type LiveSettings = DataSourceSettings<LiveOptions>;
 
@@ -18,7 +18,7 @@ export class LiveConfigEditor extends PureComponent<Props, State> {
   componentDidMount() {}
 
   onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const {onOptionsChange, options} = this.props;
+    const { onOptionsChange, options } = this.props;
     onOptionsChange({
       ...options,
       url: event.target.value,
@@ -27,7 +27,7 @@ export class LiveConfigEditor extends PureComponent<Props, State> {
   };
 
   render() {
-    const {options} = this.props;
+    const { options } = this.props;
 
     return (
       <div className="gf-form-group">

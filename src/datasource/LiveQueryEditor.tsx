@@ -1,11 +1,11 @@
 // Libraries
-import React, {PureComponent, ChangeEvent} from 'react';
+import React, { PureComponent, ChangeEvent } from 'react';
 
 // Types
-import {LiveDataSource} from './LiveDataSource';
-import {LiveQuery, LiveOptions} from './types';
+import { LiveDataSource } from './LiveDataSource';
+import { LiveQuery, LiveOptions } from './types';
 
-import {QueryEditorProps} from '@grafana/ui';
+import { QueryEditorProps } from '@grafana/ui';
 
 type Props = QueryEditorProps<LiveDataSource, LiveQuery, LiveOptions>;
 

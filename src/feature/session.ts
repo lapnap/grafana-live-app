@@ -1,6 +1,6 @@
 import Fingerprint2 from 'fingerprintjs2';
-import {IdentityInfo, ConnectionInfo} from 'types';
-import {LiveDataSource} from 'datasource/LiveDataSource';
+import { IdentityInfo, ConnectionInfo } from 'types';
+import { LiveDataSource } from 'datasource/LiveDataSource';
 
 const sendToServer: any = {
   language: true,
@@ -9,10 +9,7 @@ const sendToServer: any = {
   hardwareConcurrency: true,
 };
 
-export async function startNewSession(
-  ds: LiveDataSource,
-  identity: IdentityInfo
-): Promise<ConnectionInfo> {
+export async function startNewSession(ds: LiveDataSource, identity: IdentityInfo): Promise<ConnectionInfo> {
   const components = await Fingerprint2.getPromise();
   const info: any = {};
   let entropy = '';
@@ -25,8 +22,7 @@ export async function startNewSession(
 
   info.window = {
     width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-    height:
-      window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+    height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
   };
   info.screen = {
     width: window.screen.availWidth,

@@ -1,8 +1,8 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 // Types
-import {PluginConfigPageProps, GrafanaPlugin} from '@grafana/ui';
+import { PluginConfigPageProps, GrafanaPlugin } from '@grafana/ui';
 
 interface Props extends PluginConfigPageProps<GrafanaPlugin> {}
 
@@ -12,7 +12,7 @@ export class ExamplePage2 extends PureComponent<Props> {
   }
 
   render() {
-    const {query} = this.props;
+    const { query } = this.props;
 
     return (
       <div>

@@ -1,24 +1,17 @@
 // Libraries
-import React, {PureComponent, CSSProperties} from 'react';
+import React, { PureComponent, CSSProperties } from 'react';
 
 // Types
-import {EventsOptions} from './types';
-import {
-  PanelProps,
-  dateTime,
-  colors,
-  RawTimeRange,
-  TimeRange,
-  Select,
-  SelectOptionItem,
-} from '@grafana/ui';
-import {CanvasElement, CanvasMouseCallback, MouseEvtType} from './CanvasElement';
-import {PresenseList, LongerList} from 'feature/PresenseWatcher';
-import {Unsubscribable, PartialObserver} from 'rxjs';
-import {app} from 'app/LiveApp';
-import {PresenseInfo, EventType, PresenseKey, QuarumEvent} from 'types';
-import {zoomToTimeRange} from 'feature/Navigation';
-import {getAvatarURL} from 'components/ShowPresense';
+import { EventsOptions } from './types';
+import {  dateTime, RawTimeRange, TimeRange, SelectableValue } from '@grafana/data';
+import { PanelProps, colors, Select } from '@grafana/ui';
+import { CanvasElement, CanvasMouseCallback, MouseEvtType } from './CanvasElement';
+import { PresenseList, LongerList } from 'feature/PresenseWatcher';
+import { Unsubscribable, PartialObserver } from 'rxjs';
+import { app } from 'app/LiveApp';
+import { PresenseInfo, EventType, PresenseKey, QuarumEvent } from 'types';
+import { zoomToTimeRange } from 'feature/Navigation';
+import { getAvatarURL } from 'components/ShowPresense';
 
 export interface Props extends PanelProps<EventsOptions> {}
 
@@ -63,16 +56,11 @@ export class EventsPanel extends PureComponent<Props, State> {
   }
 
   async componentDidUpdate(prevProps: Props, prevState: State) {
-    const {timeRange, width} = this.props;
-    const {id, groupBy} = this.state;
+    const { timeRange, width } = this.props;
+    const { id, groupBy } = this.state;
 
     let needsUpdate = false;
-    if (
-      timeRange !== prevProps.timeRange ||
-      width !== prevProps.width ||
-      id !== prevState.id ||
-      groupBy !== prevState.groupBy
-    ) {
+    if (timeRange !== prevProps.timeRange || width !== prevProps.width || id !== prevState.id || groupBy !== prevState.groupBy) {
       needsUpdate = true;
     }
 
@@ -93,10 +81,10 @@ export class EventsPanel extends PureComponent<Props, State> {
   presenseObserver: PartialObserver<PresenseList> = {
     next: (presense: PresenseList) => {
       if (this.state.id) {
-        this.setState({current: presense});
+        this.setState({ current: presense });
         return;
       }
-      const {timeRange, width} = this.props;
+      const { timeRange, width } = this.props;
       this.setState({
         info: toEventDataList(presense, timeRange, width),
         current: presense,
@@ -107,7 +95,7 @@ export class EventsPanel extends PureComponent<Props, State> {
   onMouseEvent = (info: CanvasMouseCallback<PresenseInfo<QuarumEventEx>>) => {
     let selection: CanvasMouseCallback | undefined = undefined;
     let hover: number | undefined = undefined;
-    const {type, data, start, offsetX, percentX} = info;
+    const { type, data, start, offsetX, percentX } = info;
 
     // Find the hover item
     if (data && type !== MouseEvtType.leave && data.events) {
@@ -124,7 +112,7 @@ export class EventsPanel extends PureComponent<Props, State> {
     if (type === MouseEvtType.drag) {
       selection = info;
     } else if (type === MouseEvtType.up) {
-      const {timeRange} = this.props;
+      const { timeRange } = this.props;
       const min = timeRange.from.valueOf();
       const size = timeRange.to.valueOf() - min;
       const t1 = min + percentX * size;
@@ -147,16 +135,11 @@ export class EventsPanel extends PureComponent<Props, State> {
 
     // Force a redraw
     if (this.state.selection !== selection) {
-      this.setState({selection});
+      this.setState({ selection });
     }
   };
 
-  draw = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    info?: PresenseInfo<QuarumEventEx>
-  ) => {
+  draw = (ctx: CanvasRenderingContext2D, width: number, height: number, info?: PresenseInfo<QuarumEventEx>) => {
     // Clear the background
     ctx.fillStyle = '#333';
     ctx.fillRect(0, 0, width, height);
@@ -217,7 +200,7 @@ export class EventsPanel extends PureComponent<Props, State> {
   };
 
   renderSelection() {
-    const {selection} = this.state;
+    const { selection } = this.state;
     if (!selection) {
       return;
     }
@@ -244,17 +227,13 @@ export class EventsPanel extends PureComponent<Props, State> {
       return;
     }
     return (
-      <div style={{float: 'right'}}>
+      <div style={{ float: 'right' }}>
         &nbsp;&nbsp;
         {Object.keys(p.keys).map(key => {
           const vals = p.keys![key as PresenseKey];
           if (vals && vals.length > 1) {
             return (
-              <button
-                className="btn btn-small btn-inverse"
-                key={key}
-                onClick={() => this.setState({groupBy: key as PresenseKey})}
-              >
+              <button className="btn btn-small btn-inverse" key={key} onClick={() => this.setState({ groupBy: key as PresenseKey })}>
                 {key}: {vals.length}
               </button>
             );
@@ -265,8 +244,8 @@ export class EventsPanel extends PureComponent<Props, State> {
     );
   }
 
-  onGroupByChange = (item: SelectOptionItem<PresenseKey>) => {
-    this.setState({groupBy: item.value, id: undefined});
+  onGroupByChange = (item: SelectableValue<PresenseKey>) => {
+    this.setState({ groupBy: item.value, id: undefined });
   };
 
   renderControls() {
@@ -282,8 +261,8 @@ export class EventsPanel extends PureComponent<Props, State> {
     });
 
     return (
-      <div style={{width: '100%'}}>
-        <div style={{float: 'right'}}>
+      <div style={{ width: '100%' }}>
+        <div style={{ float: 'right' }}>
           <button
             className="btn btn-inverse"
             onClick={() => {
@@ -298,19 +277,14 @@ export class EventsPanel extends PureComponent<Props, State> {
           </button>
         </div>
 
-        <div style={{display: 'inline-block'}}>
-          <Select
-            options={items}
-            value={items.find(i => i.value === this.state.groupBy)}
-            onChange={this.onGroupByChange}
-            placeholder="group by"
-          />
+        <div style={{ display: 'inline-block' }}>
+          <Select options={items} value={items.find(i => i.value === this.state.groupBy)} onChange={this.onGroupByChange} placeholder="group by" />
         </div>
         {this.state.id && (
           <button
             className="btn btn-inverse"
             onClick={() => {
-              this.setState({groupBy: undefined, id: undefined});
+              this.setState({ groupBy: undefined, id: undefined });
             }}
           >
             {this.state.id}
@@ -327,8 +301,8 @@ export class EventsPanel extends PureComponent<Props, State> {
   };
 
   render() {
-    const {width, height} = this.props;
-    const {info} = this.state;
+    const { width, height } = this.props;
+    const { info } = this.state;
     if (!info || !info.results) {
       return <div>Loading...</div>;
     }
@@ -372,7 +346,7 @@ export class EventsPanel extends PureComponent<Props, State> {
           {info.results.map(item => {
             return (
               <div key={item.id}>
-                <div style={{cursor: 'pointer'}}>
+                <div style={{ cursor: 'pointer' }}>
                   {item.identity && (
                     <span
                       onClick={() => {
@@ -401,14 +375,7 @@ export class EventsPanel extends PureComponent<Props, State> {
                   {this.renderKeysInfo(item)}
                 </div>
 
-                <CanvasElement
-                  {...this.props}
-                  data={item}
-                  width="100%"
-                  height={50}
-                  draw={this.draw}
-                  onMouseEvent={this.onMouseEvent}
-                />
+                <CanvasElement {...this.props} data={item} width="100%" height={50} draw={this.draw} onMouseEvent={this.onMouseEvent} />
               </div>
             );
           })}
@@ -418,11 +385,7 @@ export class EventsPanel extends PureComponent<Props, State> {
   }
 }
 
-function toEventDataList(
-  presense: PresenseList,
-  timeRange: TimeRange,
-  width: number
-): EventDataList {
+function toEventDataList(presense: PresenseList, timeRange: TimeRange, width: number): EventDataList {
   const min = timeRange.from.valueOf();
   const size = timeRange.to.valueOf() - min;
 

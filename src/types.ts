@@ -1,5 +1,5 @@
-import {KeyValue, LoadingState} from '@grafana/ui';
-import {LiveApp} from './app/LiveApp';
+import { KeyValue, LoadingState } from '@grafana/data';
+import { LiveApp } from './app/LiveApp';
 
 export interface AppOptions {
   datasource: string;
@@ -62,7 +62,7 @@ export interface SessionDetails {
 
 export interface PresenseInfo<T extends QuarumEvent = QuarumEvent> {
   id: string;
-  keys?: {[key in PresenseKey]: string[]};
+  keys?: { [key in PresenseKey]: string[] };
   session?: SessionDetails;
   identity?: IdentityInfo;
   events: T[];

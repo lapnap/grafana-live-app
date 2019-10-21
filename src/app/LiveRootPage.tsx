@@ -1,11 +1,12 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 // Types
-import {AppRootProps, NavModelItem} from '@grafana/ui';
-import {AppOptions} from 'types';
-import {PresensePage, PresensePageID} from './page/PresensePage';
-import {DetailsPageID, DetailsPage} from '././page/DetailsPage';
+import { NavModelItem } from '@grafana/data';
+import { AppRootProps } from '@grafana/ui';
+import { AppOptions } from 'types';
+import { PresensePage, PresensePageID } from './page/PresensePage';
+import { DetailsPageID, DetailsPage } from '././page/DetailsPage';
 
 interface Props extends AppRootProps<AppOptions> {}
 
@@ -27,7 +28,7 @@ export class LiveRootPage extends PureComponent<Props> {
   }
 
   updateNav() {
-    const {path, onNavChanged, query, meta} = this.props;
+    const { path, onNavChanged, query, meta } = this.props;
 
     // Set the active tab
     let found = false;
@@ -75,7 +76,7 @@ export class LiveRootPage extends PureComponent<Props> {
   }
 
   render() {
-    const {path, query} = this.props;
+    const { path, query } = this.props;
 
     const selected = query.page || PresensePageID;
     if (selected === PresensePageID) {

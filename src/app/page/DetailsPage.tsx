@@ -1,13 +1,13 @@
 // Libraries
-import React, {PureComponent, Fragment} from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import ReactJson from 'react-json-view';
 
 // Types
-import {AppRootProps} from '@grafana/ui';
-import {AppOptions, SessionDetails, PresenseKey} from 'types';
-import {app} from 'app/LiveApp';
-import {navigateToPath} from 'feature/Navigation';
-import {PresenseList} from 'feature/PresenseWatcher';
+import { AppRootProps } from '@grafana/ui';
+import { AppOptions, SessionDetails, PresenseKey } from 'types';
+import { app } from 'app/LiveApp';
+import { navigateToPath } from 'feature/Navigation';
+import { PresenseList } from 'feature/PresenseWatcher';
 
 interface Props extends AppRootProps<AppOptions> {}
 interface State {
@@ -37,7 +37,7 @@ export class DetailsPage extends PureComponent<Props, State> {
     if (!app.ds) {
       return;
     }
-    const {query} = this.props;
+    const { query } = this.props;
 
     const g = query.g as PresenseKey;
     const id = query.id as string;
@@ -60,7 +60,7 @@ export class DetailsPage extends PureComponent<Props, State> {
   };
 
   renderDetails(details: SessionDetails) {
-    const {keys, start, ...rest} = details;
+    const { keys, start, ...rest } = details;
     return (
       <div key={keys.session}>
         <div>
@@ -71,31 +71,19 @@ export class DetailsPage extends PureComponent<Props, State> {
             const key = s as PresenseKey; // typescript
             const v = keys[key];
             return (
-              <a
-                key={key}
-                className="btn btn-inverse"
-                onClick={() => this.onClick(key, v)}
-                href="#"
-              >
+              <a key={key} className="btn btn-inverse" onClick={() => this.onClick(key, v)} href="#">
                 {key}
               </a>
             );
           })}
         </div>
-        <ReactJson
-          src={rest}
-          collapsed={true}
-          theme="monokai"
-          name={null}
-          displayDataTypes={false}
-          displayObjectSize={false}
-        />
+        <ReactJson src={rest} collapsed={true} theme="monokai" name={null} displayDataTypes={false} displayObjectSize={false} />
       </div>
     );
   }
 
   render() {
-    const {details} = this.state;
+    const { details } = this.state;
     if (!details) {
       return <div>???</div>;
     }

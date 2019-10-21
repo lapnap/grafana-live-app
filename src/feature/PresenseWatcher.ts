@@ -1,7 +1,7 @@
-import {Subject, PartialObserver, Unsubscribable} from 'rxjs';
-import {PresenseInfo, QueryResponse, PresenseKey, QueryResponseAction} from 'types';
-import {randomId} from 'util/helpers';
-import {LiveApp} from 'app/LiveApp';
+import { Subject, PartialObserver, Unsubscribable } from 'rxjs';
+import { PresenseInfo, QueryResponse, PresenseKey, QueryResponseAction } from 'types';
+import { randomId } from 'util/helpers';
+import { LiveApp } from 'app/LiveApp';
 
 export interface LongerList<T> {
   start?: number;
@@ -20,7 +20,7 @@ export class PresenseWatcher {
   private subject = new Subject<PresenseList>();
 
   private groupBy: PresenseKey = PresenseKey.identity;
-  private current: PresenseList = {groupBy: PresenseKey.identity, results: []};
+  private current: PresenseList = { groupBy: PresenseKey.identity, results: [] };
 
   constructor(private app: LiveApp) {}
 
@@ -59,7 +59,7 @@ export class PresenseWatcher {
 
     if (this.subject.observers.length) {
       this.subject.next(this.current);
-    }else if (this.app.live) {
+    } else if (this.app.live) {
       this.app.live.cancel(this.qid);
     }
   };

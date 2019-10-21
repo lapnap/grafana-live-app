@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {LiveApp} from '../app/LiveApp';
-import {PresenceWidget} from './PresenceWidget';
+import { LiveApp } from '../app/LiveApp';
+import { PresenceWidget } from './PresenceWidget';
 
 export class LapnapWidgets {
   readonly sess: HTMLDivElement;

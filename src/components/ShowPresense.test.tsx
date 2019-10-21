@@ -1,7 +1,7 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {ShowPresense, Props} from './ShowPresense';
-import {app} from 'app/LiveApp';
+import { shallow } from 'enzyme';
+import { ShowPresense, Props } from './ShowPresense';
+import { app } from 'app/LiveApp';
 
 const setup = (propOverrides?: object) => {
   const props: Props = {
@@ -23,7 +23,7 @@ const setup = (propOverrides?: object) => {
 
 describe('Render Presense Panel with basic options', () => {
   it('should render', () => {
-    const {wrapper} = setup();
+    const { wrapper } = setup();
     expect(wrapper).toBeDefined();
     expect(wrapper).toMatchSnapshot();
   });

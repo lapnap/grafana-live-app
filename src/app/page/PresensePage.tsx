@@ -1,11 +1,11 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 // Types
-import {AppRootProps} from '@grafana/ui';
-import {AppOptions} from 'types';
-import {ShowPresense} from 'components/ShowPresense';
-import {app} from 'app/LiveApp';
+import { AppRootProps } from '@grafana/ui';
+import { AppOptions } from 'types';
+import { ShowPresense } from 'components/ShowPresense';
+import { app } from 'app/LiveApp';
 
 interface Props extends AppRootProps<AppOptions> {}
 

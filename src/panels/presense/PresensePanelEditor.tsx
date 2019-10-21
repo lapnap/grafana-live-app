@@ -1,11 +1,11 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 // Components
-import {PanelEditorProps, PanelOptionsGroup} from '@grafana/ui';
+import { PanelEditorProps, PanelOptionsGroup } from '@grafana/ui';
 
 // Types
-import {PresenseOptions} from './types';
+import { PresenseOptions } from './types';
 
 export class PresensePanelEditor extends PureComponent<PanelEditorProps<PresenseOptions>> {
   render() {

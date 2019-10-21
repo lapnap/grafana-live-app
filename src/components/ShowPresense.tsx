@@ -1,12 +1,12 @@
 // Libraries
-import React, {PureComponent, CSSProperties} from 'react';
+import React, { PureComponent, CSSProperties } from 'react';
 
-import {Unsubscribable, PartialObserver} from 'rxjs';
+import { Unsubscribable, PartialObserver } from 'rxjs';
 
 // Types
-import {PresenseList} from 'feature/PresenseWatcher';
-import {PresenseInfo, PresenseKey} from 'types';
-import {LiveApp} from 'app/LiveApp';
+import { PresenseList } from 'feature/PresenseWatcher';
+import { PresenseInfo, PresenseKey } from 'types';
+import { LiveApp } from 'app/LiveApp';
 
 export interface Props {
   app: LiveApp;
@@ -39,7 +39,7 @@ export class ShowPresense extends PureComponent<Props, State> {
 
   presenseObserver: PartialObserver<PresenseList> = {
     next: (presense: PresenseList) => {
-      this.setState({presense});
+      this.setState({ presense });
     },
   };
 
@@ -72,7 +72,7 @@ export class ShowPresense extends PureComponent<Props, State> {
   };
 
   render() {
-    const {presense} = this.state;
+    const { presense } = this.state;
     if (!presense || !presense.results) {
       return <div>Presense Not Found</div>;
     }

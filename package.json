@@ -32,8 +32,8 @@
     ]
   },
   "devDependencies": {
-    "@grafana/toolkit": "next",
-    "@grafana/ui": "next",
+    "@grafana/toolkit": "latest",
+    "@grafana/ui": "latest",
     "@types/enzyme": "^3.9.4",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/fingerprintjs2": "^2.0.0",
@@ -41,6 +41,6 @@
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.11.2",
     "enzyme-to-json": "3.3.5",
-    "grafana-sdk-mocks": "github:ryantxu/grafana-sdk-mocks"
+    "grafana-sdk-mocks": "github:grafana/grafana-sdk-mocks"
   }
 }

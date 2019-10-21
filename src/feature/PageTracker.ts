@@ -1,4 +1,4 @@
-import {Subject, PartialObserver, Unsubscribable} from 'rxjs';
+import { Subject, PartialObserver, Unsubscribable } from 'rxjs';
 
 export interface PageEvent {
   page: string;

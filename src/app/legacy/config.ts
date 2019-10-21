@@ -1,4 +1,4 @@
-import {DataSourceApi} from '@grafana/ui';
+import { DataSourceApi } from '@grafana/ui';
 
 export class ConfigCtrl {
   static templateUrl = 'app/legacy/config.html';

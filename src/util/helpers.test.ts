@@ -1,4 +1,4 @@
-import {randInstanceID} from './helpers';
+import { randInstanceID } from './helpers';
 
 describe('read csv', () => {
   it('sessionID to be defined', () => {

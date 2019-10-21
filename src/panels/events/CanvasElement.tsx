@@ -1,5 +1,5 @@
 // Libraries
-import React, {PureComponent, MouseEvent} from 'react';
+import React, { PureComponent, MouseEvent } from 'react';
 
 export enum MouseEvtType {
   enter = 'enter',
@@ -87,7 +87,7 @@ export class CanvasElement<T> extends PureComponent<Props<T>> {
     if (!canvas || !this.rect) {
       return undefined;
     }
-    const {offsetX} = event.nativeEvent;
+    const { offsetX } = event.nativeEvent;
     const percentX = offsetX / this.rect.width;
     const info = {
       type,
@@ -133,11 +133,11 @@ export class CanvasElement<T> extends PureComponent<Props<T>> {
   };
 
   render() {
-    const {width, height} = this.props;
+    const { width, height } = this.props;
     return (
       <canvas
         ref={this.ref}
-        style={{width, height}}
+        style={{ width, height }}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onMouseMove={this.onMouseMove}

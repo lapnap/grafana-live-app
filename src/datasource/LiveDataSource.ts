@@ -1,21 +1,13 @@
 // Types
-import {
-  DataQueryRequest,
-  DataQueryResponse,
-  DataSourceApi,
-  DataSourceInstanceSettings,
-  DataStreamObserver,
-  SeriesData,
-  FieldType,
-  DataStreamState,
-  LoadingState,
-} from '@grafana/ui';
+import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings, DataStreamObserver, DataStreamState } from '@grafana/ui';
 
-import {LiveQuery, LiveOptions} from './types';
-import {app} from 'app/LiveApp';
-import {Unsubscribable, PartialObserver} from 'rxjs';
-import {PresenseList} from 'feature/PresenseWatcher';
-import {PresenseKey} from 'types';
+import { DataFrame, FieldType, LoadingState, toDataFrame } from '@grafana/data';
+
+import { LiveQuery, LiveOptions } from './types';
+import { app } from 'app/LiveApp';
+import { Unsubscribable, PartialObserver } from 'rxjs';
+import { PresenseList } from 'feature/PresenseWatcher';
+import { PresenseKey } from 'types';
 
 type StreamWorkers = {
   [key: string]: StreamWorker;
@@ -49,16 +41,13 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
     });
   }
 
-  async query(
-    req: DataQueryRequest<LiveQuery>,
-    observer: DataStreamObserver
-  ): Promise<DataQueryResponse> {
+  async query(req: DataQueryRequest<LiveQuery>, observer: DataStreamObserver): Promise<DataQueryResponse> {
     // Get the socket, or throw an error
     if (!(await app.getLiveSocket(1000))) {
       return Promise.reject('Faild to get Live Socket');
     }
 
-    const resp: DataQueryResponse = {data: []};
+    const resp: DataQueryResponse = { data: [] };
     for (const query of req.targets) {
       // create stream key
       const key = req.dashboardId + '/' + req.panelId + '/' + query.refId;
@@ -66,7 +55,7 @@ export class LiveDataSource extends DataSourceApi<LiveQuery, LiveOptions> {
       if (this.workers[key]) {
         const existing = this.workers[key];
         if (existing.update(query, req)) {
-          for (const s of existing.stream.series!) {
+          for (const s of existing.stream.data!) {
             resp.data.push(s);
           }
           continue;
@@ -111,12 +100,7 @@ export class StreamWorker {
   subscription?: Unsubscribable;
   timeoutId = 0;
 
-  constructor(
-    key: string,
-    query: LiveQuery,
-    request: DataQueryRequest,
-    observer: DataStreamObserver
-  ) {
+  constructor(key: string, query: LiveQuery, request: DataQueryRequest, observer: DataStreamObserver) {
     this.query = query;
     this.observer = observer;
     this.stream = {
@@ -153,38 +137,32 @@ export class StreamWorker {
 }
 
 export class PresenseWorker extends StreamWorker {
-  constructor(
-    key: string,
-    query: LiveQuery,
-    request: DataQueryRequest,
-    observer: DataStreamObserver
-  ) {
+  constructor(key: string, query: LiveQuery, request: DataQueryRequest, observer: DataStreamObserver) {
     super(key, query, request, observer);
     this.subscription = app.presense.subscribe(this.presenseObserver);
   }
 
   presenseObserver: PartialObserver<PresenseList> = {
     next: (presense: PresenseList) => {
-      this.stream.series = [this.toSeriesData(presense)];
+      this.stream.data = [this.toSeriesData(presense)];
       if (this.observer) {
         this.observer(this.stream);
       }
     },
   };
 
-  toSeriesData(presense: PresenseList): SeriesData {
-    const series: SeriesData = {
+  toSeriesData(presense: PresenseList): DataFrame {
+    const series = toDataFrame({
       refId: this.query.refId,
       fields: [
-        {name: 'id', type: FieldType.string},
-        {name: 'login', type: FieldType.string},
+        { name: 'id', type: FieldType.string },
+        { name: 'login', type: FieldType.string },
         // {name: 'first_action', type: FieldType.string},
         // {name: 'last_time', type: FieldType.time},
         // {name: 'last_action', type: FieldType.string},
         // {name: 'who_login', type: FieldType.string},
       ],
-      rows: [],
-    };
+    });
 
     for (const p of presense.results) {
       series.rows.push([

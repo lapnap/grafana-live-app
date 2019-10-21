@@ -1,4 +1,4 @@
-import {DataQuery, DataSourceJsonData} from '@grafana/ui';
+import { DataQuery, DataSourceJsonData } from '@grafana/ui';
 
 export enum QuerySubject {
   sessions = 'sessions',

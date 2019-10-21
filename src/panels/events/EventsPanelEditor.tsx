@@ -1,11 +1,11 @@
 // Libraries
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 // Components
-import {PanelEditorProps, PanelOptionsGroup} from '@grafana/ui';
+import { PanelEditorProps, PanelOptionsGroup } from '@grafana/ui';
 
 // Types
-import {EventsOptions} from './types';
+import { EventsOptions } from './types';
 
 export class EventsPanelEditor extends PureComponent<PanelEditorProps<EventsOptions>> {
   render() {

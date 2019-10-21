@@ -1,6 +1,6 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {EventsPanel, Props} from './EventsPanel';
+import { shallow } from 'enzyme';
+import { EventsPanel, Props } from './EventsPanel';
 
 const setup = (propOverrides?: object) => {
   const props: Props = {
@@ -21,7 +21,7 @@ const setup = (propOverrides?: object) => {
 
 describe('Render Events Panel with basic options', () => {
   it('should render', () => {
-    const {wrapper} = setup();
+    const { wrapper } = setup();
     expect(wrapper).toBeDefined();
   });
 });

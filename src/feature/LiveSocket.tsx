@@ -1,13 +1,6 @@
-import {
-  EventType,
-  QueryResponse,
-  QuarumEvent,
-  QueryRequest,
-  QueryResponseObserver,
-  LiveRequest,
-} from 'types';
-import {LoadingState} from '@grafana/ui';
-import {Subject} from 'rxjs';
+import { EventType, QueryResponse, QuarumEvent, QueryRequest, QueryResponseObserver, LiveRequest } from 'types';
+import { LoadingState } from '@grafana/data';
+import { Subject } from 'rxjs';
 
 export interface LiveSocketState {
   streaming: boolean;
@@ -16,7 +9,7 @@ export interface LiveSocketState {
 export class LiveSocket {
   readonly subject = new Subject<LiveSocketState>();
 
-  private state = {streaming: false};
+  private state = { streaming: false };
   private conn?: WebSocket;
   private init?: Promise<WebSocket>;
   private readonly observers = new Map<string, QueryResponseObserver>();
@@ -55,7 +48,7 @@ export class LiveSocket {
       ws.onclose = (evt: any) => {
         this.conn = undefined;
         this.init = undefined;
-        reject({message: 'Connection closed'});
+        reject({ message: 'Connection closed' });
         setTimeout(this.reconnect, 2000);
         this.state = {
           streaming: false,
@@ -65,7 +58,7 @@ export class LiveSocket {
 
       ws.onerror = (evt: any) => {
         this.init = undefined;
-        reject({message: 'Error sending event'});
+        reject({ message: 'Error sending event' });
         console.log('Live: websocket error', evt);
       };
 
@@ -102,7 +95,7 @@ export class LiveSocket {
     if (this.conn) {
       this.conn.send(
         JSON.stringify({
-          event: {action: EventType.Heartbeat},
+          event: { action: EventType.Heartbeat },
         })
       );
       setTimeout(this.heartbeat, 15000); // 15seconds
@@ -113,12 +106,12 @@ export class LiveSocket {
   //---------------------------------------------------
 
   async notify(event: Partial<QuarumEvent>) {
-    return this.send({event});
+    return this.send({ event });
   }
 
   async cancel(id: string) {
     this.observers.delete(id);
-    return this.send({cancel: id});
+    return this.send({ cancel: id });
   }
 
   async query(query: QueryRequest<any>, observer: QueryResponseObserver<any>) {
@@ -127,7 +120,7 @@ export class LiveSocket {
     }
     this.observers.set(query.id, observer);
     query.stream = true;
-    return this.send({query});
+    return this.send({ query });
   }
 
   private async send(req: LiveRequest): Promise<boolean> {
